@@ -1445,9 +1445,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gfazioli/mantine-marquee@workspace:*, @gfazioli/mantine-marquee@workspace:package":
+"@gfazioli/mantine-spinner@workspace:*, @gfazioli/mantine-spinner@workspace:package":
   version: 0.0.0-use.local
-  resolution: "@gfazioli/mantine-marquee@workspace:package"
+  resolution: "@gfazioli/mantine-spinner@workspace:package"
   peerDependencies:
     "@mantine/core": ">=7.0.0"
     "@mantine/hooks": ">=7.0.0"
@@ -6998,7 +6998,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "extension-template-docs@workspace:docs"
   dependencies:
-    "@gfazioli/mantine-marquee": "workspace:*"
+    "@gfazioli/mantine-spinner": "workspace:*"
     "@mantine/core": "npm:7.16.2"
     "@mantine/dates": "npm:^7.16.2"
     "@mantine/hooks": "npm:7.16.2"

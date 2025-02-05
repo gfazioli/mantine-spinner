@@ -1,16 +1,16 @@
-# Mantine Marquee Component
+# Mantine Spinner Component
 
 <p align="center">
-  <img width="866" alt="image" src="https://github.com/gfazioli/mantine-marquee/assets/432181/d9d37b48-ab49-44c7-9315-4ad9a48e70f8">
+  <img width="866" alt="image" src="https://github.com/gfazioli/mantine-spinner/assets/432181/d9d37b48-ab49-44c7-9315-4ad9a48e70f8">
 </p>
 
 ---
 
 <div align="center">
   
-  [![NPM version](https://img.shields.io/npm/v/%40gfazioli%2Fmantine-marquee?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-marquee)
-  [![NPM Downloads](https://img.shields.io/npm/dm/%40gfazioli%2Fmantine-marquee?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-marquee)
-  ![NPM License](https://img.shields.io/npm/l/%40gfazioli%2Fmantine-marquee?style=for-the-badge)
+  [![NPM version](https://img.shields.io/npm/v/%40gfazioli%2Fmantine-spinner?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-spinner)
+  [![NPM Downloads](https://img.shields.io/npm/dm/%40gfazioli%2Fmantine-spinner?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-spinner)
+  ![NPM License](https://img.shields.io/npm/l/%40gfazioli%2Fmantine-spinner?style=for-the-badge)
 
 </div>
 
@@ -18,31 +18,31 @@
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
 
-It allows to create a marquee effect with any content.
+It allows to create a spinner effect with any content.
 
 You can find more components on the [Mantine Extensions Hub](https://mantine-extensions.vercel.app/) library.
 
 ## Installation
 
 ```sh
-npm install @gfazioli/mantine-marquee
+npm install @gfazioli/mantine-spinner
 ```
 or 
 
 ```sh
-yarn add @gfazioli/mantine-marquee
+yarn add @gfazioli/mantine-spinner
 ```
 
 After installation import package styles at the root of your application:
 
 ```tsx
-import '@gfazioli/mantine-marquee/styles.css';
+import '@gfazioli/mantine-spinner/styles.css';
 ```
 
 ## Usage
 
 ```tsx
-import { Marquee } from '@gfazioli/mantine-marquee';
+import { Spinner } from '@gfazioli/mantine-spinner';
 
 function Demo() {
   function BoxComponent({ children, ...props }: { children: ReactNode; [key: string]: any }) {
@@ -54,12 +54,12 @@ function Demo() {
   }
 
   return (
-    <Marquee {...props} w={560} h={300}>
+    <Spinner {...props} w={560} h={300}>
       <BoxComponent bg="red">Hello World #1</BoxComponent>
       <BoxComponent bg="cyan">Hope you like it #2</BoxComponent>
       <BoxComponent bg="blue">Have a nice day #3</BoxComponent>
       <BoxComponent bg="lime">Goodbye #4</BoxComponent>
-    </Marquee>
+    </Spinner>
   );
 }
 ```

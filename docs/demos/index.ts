@@ -1,5 +1,6 @@
-export { configurator } from './Marquee.demo.configurator';
-export { example } from './Marquee.demo.example';
-export { feedbacks } from './Marquee.demo.feedbacks';
-export { multiple } from './Marquee.demo.multiple';
-export { multipleVertical } from './Marquee.demo.multiple-vertical';
+export { configurator } from './Spinner.demo.configurator';
+export { example } from './Spinner.demo.example';
+export { feedbacks } from './Spinner.demo.feedbacks';
+export { multiple } from './Spinner.demo.multiple';
+export { multipleVertical } from './Spinner.demo.multiple-vertical';
+

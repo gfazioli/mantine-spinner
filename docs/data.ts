@@ -25,12 +25,12 @@ export interface PackageData {
 }
 
 export const PACKAGE_DATA: PackageData = {
-  packageName: '@gfazioli/mantine-marquee',
+  packageName: '@gfazioli/mantine-spinner',
   packageDescription:
-    'A Mantine component that allows you to create a marquee effect with a list of elements.',
-  mdxFileUrl: 'https://github.com/gfazioli/mantine-marquee/blob/master/docs/pages/index.mdx',
-  repositoryUrl: 'https://github.com/gfazioli/mantine-marquee',
-  licenseUrl: 'https://github.com/gfazioli/mantine-marquee/blob/master/LICENSE',
+    'A Mantine component that allows you to create a spinner effect with a list of elements.',
+  mdxFileUrl: 'https://github.com/gfazioli/mantine-spinner/blob/master/docs/pages/index.mdx',
+  repositoryUrl: 'https://github.com/gfazioli/mantine-spinner',
+  licenseUrl: 'https://github.com/gfazioli/mantine-spinner/blob/master/LICENSE',
   author: {
     name: 'Giovambattista Fazioli',
     githubUsername: 'gfazioli',

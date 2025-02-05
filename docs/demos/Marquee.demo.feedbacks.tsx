@@ -1,4 +1,4 @@
-import { Marquee } from "@gfazioli/mantine-marquee";
+import { Spinner } from "@gfazioli/mantine-spinner";
 import { Avatar, Card, Group, Rating, Stack, Text, Title } from "@mantine/core";
 import { MantineDemo } from "@mantinex/demo";
 import { ReactNode } from "react";
@@ -85,18 +85,18 @@ function Wrapper() {
   }
 
   return (
-    <Marquee w={792} pauseOnHover fadeEdges>
+    <Spinner w={792} pauseOnHover fadeEdges>
       {testimonials.map(({ text, ...testimonial }, index) => (
         <BoxComponent key={index} {...testimonial}>
           {text}
         </BoxComponent>
       ))}
-    </Marquee>
+    </Spinner>
   );
 }
 
 const code = `
-import { Marquee } from '@gfazioli/mantine-marquee';
+import { Spinner } from '@gfazioli/mantine-spinner';
 import { Avatar, Card, Group, Rating, Stack, Text, Title } from '@mantine/core';
 import { ReactNode } from 'react';
 import { testimonials } from './testimonials';
@@ -135,13 +135,13 @@ function Demo() {
   }
 
   return (
-    <Marquee w={792} pauseOnHover fadeEdges>
+    <Spinner w={792} pauseOnHover fadeEdges>
       {testimonials.map(({ text, ...testimonial }, index) => (
         <BoxComponent key={index} {...testimonial}>
           {text}
         </BoxComponent>
       ))}
-    </Marquee>
+    </Spinner>
   );
 }
 `;

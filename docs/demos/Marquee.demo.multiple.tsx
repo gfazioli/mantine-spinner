@@ -1,4 +1,4 @@
-import { Marquee } from "@gfazioli/mantine-marquee";
+import { Spinner } from "@gfazioli/mantine-spinner";
 import { Box } from "@mantine/core";
 import { MantineDemo } from "@mantinex/demo";
 import { ReactNode } from "react";
@@ -26,24 +26,24 @@ function Wrapper() {
 
   return (
     <>
-      <Marquee w={790} mb={16} fadeEdges>
+      <Spinner w={790} mb={16} fadeEdges>
         <BoxComponent bg="red">Hello World #1</BoxComponent>
         <BoxComponent bg="cyan">Hope you like it #2</BoxComponent>
         <BoxComponent bg="blue">Have a nice day #3</BoxComponent>
         <BoxComponent bg="lime">Goodbye #4</BoxComponent>
-      </Marquee>
-      <Marquee reverse w={790} fadeEdges>
+      </Spinner>
+      <Spinner reverse w={790} fadeEdges>
         <BoxComponent bg="red">Hello World #1</BoxComponent>
         <BoxComponent bg="cyan">Hope you like it #2</BoxComponent>
         <BoxComponent bg="blue">Have a nice day #3</BoxComponent>
         <BoxComponent bg="lime">Goodbye #4</BoxComponent>
-      </Marquee>
+      </Spinner>
     </>
   );
 }
 
 const code = `
-import { Marquee } from '@gfazioli/mantine-marquee';
+import { Spinner } from '@gfazioli/mantine-spinner';
 
 function Demo() {
   function BoxComponent({ children, ...props }: { children: ReactNode; [key: string]: any }) {
@@ -56,18 +56,18 @@ function Demo() {
 
   return (
     <>
-      <Marquee w={800} mb={16} fadeEdges>
+      <Spinner w={800} mb={16} fadeEdges>
         <BoxComponent bg="red">Hello World #1</BoxComponent>
         <BoxComponent bg="cyan">Hope you like it #2</BoxComponent>
         <BoxComponent bg="blue">Have a nice day #3</BoxComponent>
         <BoxComponent bg="lime">Goodbye #4</BoxComponent>
-      </Marquee>
-      <Marquee reverse w={800} fadeEdges>
+      </Spinner>
+      <Spinner reverse w={800} fadeEdges>
         <BoxComponent bg="red">Hello World #1</BoxComponent>
         <BoxComponent bg="cyan">Hope you like it #2</BoxComponent>
         <BoxComponent bg="blue">Have a nice day #3</BoxComponent>
         <BoxComponent bg="lime">Goodbye #4</BoxComponent>
-      </Marquee>
+      </Spinner>
     </>
   );
 }

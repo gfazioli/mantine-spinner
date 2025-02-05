@@ -1,19 +1,19 @@
-import type { MarqueeFactory } from '@gfazioli/mantine-marquee';
+import type { SpinnerFactory } from '@gfazioli/mantine-spinner';
 import type { StylesApiData } from '../components/styles-api.types';
 
-export const MarqueeStylesApi: StylesApiData<MarqueeFactory> = {
+export const SpinnerStylesApi: StylesApiData<SpinnerFactory> = {
   selectors: {
     root: 'Root element',
   },
 
   vars: {
     root: {
-      '--marquee-animation-direction': 'Animation direction',
-      '--marquee-direction': 'Horizontal or vertical direction',
-      '--marquee-duration': 'Animation speed duration',
-      '--marquee-gap': 'Space between elements',
-      '--marquee-fade-edge-size': 'Fade edge size',
-      '--marquee-fade-edge-color': 'Fade edge color',
+      '--spinner-animation-direction': 'Animation direction',
+      '--spinner-direction': 'Horizontal or vertical direction',
+      '--spinner-duration': 'Animation speed duration',
+      '--spinner-gap': 'Space between elements',
+      '--spinner-fade-edge-size': 'Fade edge size',
+      '--spinner-fade-edge-color': 'Fade edge color',
     },
   },
 

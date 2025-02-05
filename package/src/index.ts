@@ -1,8 +1,9 @@
-export { Marquee } from './Marquee';
+export { Spinner } from './Spinner';
 export type {
-  MarqueeBaseProps,
-  MarqueeCssVariables,
-  MarqueeFactory,
-  MarqueeProps,
-  MarqueeStylesNames,
-} from './Marquee';
+    SpinnerBaseProps,
+    SpinnerCssVariables,
+    SpinnerFactory,
+    SpinnerProps,
+    SpinnerStylesNames
+} from './Spinner';
+

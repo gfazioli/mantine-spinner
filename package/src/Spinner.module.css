@@ -1,0 +1,31 @@
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.root {
+} /* styles.css */
+
+.root {
+}
+
+.line {
+  opacity: 0;
+}
+
+.line {
+  stroke-linecap: round;
+  animation-name: fade;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  animation-duration: var(--spinner-animation-duration, 1s);
+  animation-delay: var(--anim-delay, 0s);
+}

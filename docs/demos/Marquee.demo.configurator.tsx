@@ -1,4 +1,4 @@
-import { Marquee } from "@gfazioli/mantine-marquee";
+import { Spinner } from "@gfazioli/mantine-spinner";
 import { Box } from "@mantine/core";
 import { MantineDemo } from "@mantinex/demo";
 
@@ -26,7 +26,7 @@ function Wrapper(props: any) {
   }
 
   return (
-    <Marquee {...props} w={544} h={58}>
+    <Spinner {...props} w={544} h={58}>
       <BoxComponent bg="red">Hello World #1</BoxComponent>
       <BoxComponent bg="cyan">Hope you like it #2</BoxComponent>
       <BoxComponent bg="blue">Have a nice day #3</BoxComponent>
@@ -34,12 +34,12 @@ function Wrapper(props: any) {
       <BoxComponent bg="orange">Hello World #5</BoxComponent>
       <BoxComponent bg="dark">Hope you like it #6</BoxComponent>
       <BoxComponent bg="green">Have a nice day #7</BoxComponent>
-    </Marquee>
+    </Spinner>
   );
 }
 
 const code = `
-import { Marquee } from '@gfazioli/mantine-marquee';
+import { Spinner } from '@gfazioli/mantine-spinner';
 
 function Demo() {
   function BoxComponent({ children, ...props }: { children: ReactNode; [key: string]: any }) {
@@ -51,12 +51,12 @@ function Demo() {
   }
 
   return (
-    <Marquee w={544} h={300}{{props}}>
+    <Spinner w={544} h={300}{{props}}>
       <BoxComponent bg="red">Hello World #1</BoxComponent>
       <BoxComponent bg="cyan">Hope you like it #2</BoxComponent>
       <BoxComponent bg="blue">Have a nice day #3</BoxComponent>
       <BoxComponent bg="lime">Goodbye #4</BoxComponent>
-    </Marquee>
+    </Spinner>
   );
 }
 `;

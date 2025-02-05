@@ -1,14 +1,14 @@
-import { Marquee } from "@gfazioli/mantine-marquee";
+import { Spinner } from "@gfazioli/mantine-spinner";
 import { ThemeIcon } from "@mantine/core";
 import { MantineDemo } from "@mantinex/demo";
 import {
-  IconBrand4chan,
-  IconBrandAmazon,
-  IconBrandBing,
-  IconBrandGithub,
-  IconBrandMantine,
-  IconBrandWhatsapp,
-  IconBrandWordpress,
+    IconBrand4chan,
+    IconBrandAmazon,
+    IconBrandBing,
+    IconBrandGithub,
+    IconBrandMantine,
+    IconBrandWhatsapp,
+    IconBrandWordpress,
 } from "@tabler/icons-react";
 import { ReactNode } from "react";
 
@@ -38,16 +38,16 @@ function Wrapper(props: any) {
   }
 
   return (
-    <Marquee w={792} pauseOnHover fadeEdges>
+    <Spinner w={792} pauseOnHover fadeEdges>
       {iconsBrand.map((icon, index) => (
         <BoxComponent key={index}>{icon}</BoxComponent>
       ))}
-    </Marquee>
+    </Spinner>
   );
 }
 
 const code = `
-import { Marquee } from '@gfazioli/mantine-marquee';
+import { Spinner } from '@gfazioli/mantine-spinner';
 import {
   IconBrand4chan,
   IconBrandAmazon,
@@ -78,11 +78,11 @@ function Demo() {
   }
 
   return (
-    <Marquee w={792} pauseOnHover fadeEdges>
+    <Spinner w={792} pauseOnHover fadeEdges>
       {iconsBrand.map((icon, index) => (
         <BoxComponent key={index}>{icon}</BoxComponent>
       ))}
-    </Marquee>
+    </Spinner>
   );
 }
 `;

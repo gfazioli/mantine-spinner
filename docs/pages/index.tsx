@@ -1,4 +1,3 @@
-import React from 'react';
 import { DocsTabs } from '../components/DocsTabs';
 import { PageHeader } from '../components/PageHeader';
 import { Shell } from '../components/Shell';
@@ -13,8 +12,8 @@ export default function HomePage() {
       <PageHeader data={PACKAGE_DATA} />
       <DocsTabs
         docgen={docgen}
-        componentsProps={['Marquee']}
-        componentsStyles={['Marquee']}
+        componentsProps={['Spinner']}
+        componentsStyles={['Spinner']}
         stylesApiData={STYLES_API_DATA}
       >
         <Docs />
