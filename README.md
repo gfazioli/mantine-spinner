@@ -18,6 +18,7 @@ https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
 
 ## Overview
 
+> [!NOTE]
 > Freely inspired by Matt Cannon on [CodePen](https://codepen.io/matt-cannon/pen/qEWKLoZ)
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
