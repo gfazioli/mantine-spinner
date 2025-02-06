@@ -16,6 +16,8 @@
 
 ## Overview
 
+> Freely inspired by Matt Cannon on [CodePen](https://codepen.io/matt-cannon/pen/qEWKLoZ)
+
 This component is created on top of the [Mantine](https://mantine.dev/) library.
 
 It allows to create a spinner effect with any content.
@@ -45,22 +47,7 @@ import '@gfazioli/mantine-spinner/styles.css';
 import { Spinner } from '@gfazioli/mantine-spinner';
 
 function Demo() {
-  function BoxComponent({ children, ...props }: { children: ReactNode; [key: string]: any }) {
-    return (
-      <Box {...props} p="md" w="200px" c="white" style={{ borderRadius: '8px' }}>
-        {children}
-      </Box>
-    );
-  }
-
-  return (
-    <Spinner {...props} w={560} h={300}>
-      <BoxComponent bg="red">Hello World #1</BoxComponent>
-      <BoxComponent bg="cyan">Hope you like it #2</BoxComponent>
-      <BoxComponent bg="blue">Have a nice day #3</BoxComponent>
-      <BoxComponent bg="lime">Goodbye #4</BoxComponent>
-    </Spinner>
-  );
+  return <Spinner />;
 }
 ```
 
