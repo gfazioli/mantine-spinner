@@ -11,6 +11,8 @@ export default {
     speed: 1150,
     color: '#006d8f',
     direction: 'clockwise',
+    strokeLinecap: 'round',
+    transitionTimingFunction: 'ease',
   },
   argTypes: {
     size: { control: { type: 'range', min: 0, max: 300, step: 1 } },
@@ -24,6 +26,18 @@ export default {
         type: 'select',
       },
       options: ['clockwise', 'counter-clockwise'],
+    },
+    strokeLinecap: {
+      control: {
+        type: 'select',
+      },
+      options: ['round', 'butt', 'square'],
+    },
+    transitionTimingFunction: {
+      control: {
+        type: 'select',
+      },
+      options: ['ease', 'ease-in', 'ease-out', 'ease-in-out'],
     },
   },
 };

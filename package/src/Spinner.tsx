@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   BoxProps,
   createVarsResolver,
   Factory,
   factory,
-  getSize,
-  getThemeColor,
   MantineColor,
   MantineSize,
   parseThemeColor,
@@ -23,7 +21,7 @@ export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
 export type SpinnerStylesNames = 'root';
 
 export type SpinnerCssVariables = {
-  root: '--spinner-size' | '--spinner-color' | '--spinner-animation-duration';
+  root: '--spinner-animation-duration' | '--spinner-stroke-linecap';
 };
 
 export interface SpinnerBaseProps {
@@ -45,6 +43,12 @@ export interface SpinnerBaseProps {
   /** Spinner animation direction */
   direction?: SpinnerDirection;
 
+  /** Animation timing function */
+  transitionTimingFunction?: string;
+
+  /** Stroke linecap property */
+  strokeLinecap?: 'round' | 'square' | 'butt';
+
   /** Key of `theme.colors` or any valid CSS color, default value is `theme.primaryColor`  */
   color?: MantineColor;
 }
@@ -65,24 +69,26 @@ export const defaultProps: Partial<SpinnerProps> = {
   thickness: 3,
   speed: 1200,
   direction: 'clockwise',
+  strokeLinecap: 'round',
+  transitionTimingFunction: 'ease',
 };
 
-const varsResolver = createVarsResolver<SpinnerFactory>((theme, { size, inner, color, speed }) => {
-  return {
-    root: {
-      '--spinner-size': getSize(size, 'spinner-size'),
-      '--spinner-inner': getSize(inner, 'spinner-inner'),
-      '--spinner-color': color ? getThemeColor(color, theme) : undefined,
-      '--spinner-animation-duration': `${speed || 1}ms`,
-    },
-  };
-});
+const varsResolver = createVarsResolver<SpinnerFactory>(
+  (theme, { strokeLinecap, speed, transitionTimingFunction }) => {
+    return {
+      root: {
+        '--spinner-stroke-linecap': strokeLinecap,
+        '--spinner-animation-duration': `${speed || 1}ms`,
+        '--spinner-timing-function': transitionTimingFunction,
+      },
+    };
+  }
+);
 
 export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   const props = useProps('Spinner', defaultProps, _props);
   const theme = useMantineTheme();
-
-  const [over, setOver] = React.useState(false);
+  const [invalidate, setInvalidate] = useState(false);
 
   const {
     size,
@@ -136,13 +142,23 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   const maxRadius = center - thickness;
   const radius = Math.min(sizeValue / 2, maxRadius);
   const innerRadius = Math.min(innerValue, radius);
-
   const directionValue = direction === 'counter-clockwise' ? -1 : 1;
 
   const parsedColor = parseThemeColor({
     color: color || theme.primaryColor,
     theme,
   });
+
+  useEffect(() => {
+    if (!invalidate) {
+      setInvalidate(true);
+      setTimeout(() => setInvalidate(false), 500);
+    }
+  }, [segments]);
+
+  if (invalidate) {
+    return null;
+  }
 
   return (
     <Box
