@@ -8,9 +8,8 @@ export const SpinnerStylesApi: StylesApiData<SpinnerFactory> = {
 
   vars: {
     root: {
-      '--spinner-size': 'Size of the spinner',
+      '--spinner-stroke-linecap': 'Stroke linecap',
       '--spinner-animation-duration': 'Duration of the animation',
-      '--spinner-color': 'Color of the spinner',
     },
   },
 
