@@ -1,1 +1,1 @@
-export { configurator } from "./Spinner.demo.configurator";
+export { configurator } from './Spinner.demo.configurator';

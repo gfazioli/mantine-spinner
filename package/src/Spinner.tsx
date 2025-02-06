@@ -1,30 +1,29 @@
+import React from 'react';
 import {
   Box,
   BoxProps,
-  Factory,
-  MantineColor,
-  MantineSize,
-  StylesApiProps,
   createVarsResolver,
+  Factory,
   factory,
   getSize,
   getThemeColor,
+  MantineColor,
+  MantineSize,
   parseThemeColor,
   px,
+  StylesApiProps,
   useMantineTheme,
   useProps,
   useStyles,
-} from "@mantine/core";
-import React from "react";
+} from '@mantine/core';
+import classes from './Spinner.module.css';
 
-import classes from "./Spinner.module.css";
+export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
 
-export type SpinnerDirection = "clockwise" | "counter-clockwise";
-
-export type SpinnerStylesNames = "root";
+export type SpinnerStylesNames = 'root';
 
 export type SpinnerCssVariables = {
-  root: "--spinner-size" | "--spinner-color" | "--spinner-animation-duration";
+  root: '--spinner-size' | '--spinner-color' | '--spinner-animation-duration';
 };
 
 export interface SpinnerBaseProps {
@@ -50,10 +49,7 @@ export interface SpinnerBaseProps {
   color?: MantineColor;
 }
 
-export interface SpinnerProps
-  extends BoxProps,
-    SpinnerBaseProps,
-    StylesApiProps<SpinnerFactory> {}
+export interface SpinnerProps extends BoxProps, SpinnerBaseProps, StylesApiProps<SpinnerFactory> {}
 
 export type SpinnerFactory = Factory<{
   props: SpinnerProps;
@@ -63,29 +59,27 @@ export type SpinnerFactory = Factory<{
 }>;
 
 export const defaultProps: Partial<SpinnerProps> = {
-  size: "md",
+  size: 'md',
   inner: 8,
   segments: 12,
   thickness: 3,
   speed: 1200,
-  direction: "clockwise",
+  direction: 'clockwise',
 };
 
-const varsResolver = createVarsResolver<SpinnerFactory>(
-  (theme, { size, inner, color, speed }) => {
-    return {
-      root: {
-        "--spinner-size": getSize(size, "spinner-size"),
-        "--spinner-inner": getSize(inner, "spinner-inner"),
-        "--spinner-color": color ? getThemeColor(color, theme) : undefined,
-        "--spinner-animation-duration": `${speed || 1}ms`,
-      },
-    };
-  },
-);
+const varsResolver = createVarsResolver<SpinnerFactory>((theme, { size, inner, color, speed }) => {
+  return {
+    root: {
+      '--spinner-size': getSize(size, 'spinner-size'),
+      '--spinner-inner': getSize(inner, 'spinner-inner'),
+      '--spinner-color': color ? getThemeColor(color, theme) : undefined,
+      '--spinner-animation-duration': `${speed || 1}ms`,
+    },
+  };
+});
 
 export const Spinner = factory<SpinnerFactory>((_props, ref) => {
-  const props = useProps("Spinner", defaultProps, _props);
+  const props = useProps('Spinner', defaultProps, _props);
   const theme = useMantineTheme();
 
   const [over, setOver] = React.useState(false);
@@ -110,7 +104,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   } = props;
 
   const getStyles = useStyles<SpinnerFactory>({
-    name: "Spinner",
+    name: 'Spinner',
     props,
     classes,
     className,
@@ -123,10 +117,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   });
 
   const getSizeValue = (size: MantineSize | (string & {}) | number): number => {
-    if (
-      typeof size === "string" &&
-      ["lg", "xl", "md", "sm", "xs"].includes(size)
-    ) {
+    if (typeof size === 'string' && ['lg', 'xl', 'md', 'sm', 'xs'].includes(size)) {
       return {
         xl: 58,
         lg: 44,
@@ -146,7 +137,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   const radius = Math.min(sizeValue / 2, maxRadius);
   const innerRadius = Math.min(innerValue, radius);
 
-  const directionValue = direction === "counter-clockwise" ? -1 : 1;
+  const directionValue = direction === 'counter-clockwise' ? -1 : 1;
 
   const parsedColor = parseThemeColor({
     color: color || theme.primaryColor,
@@ -155,7 +146,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
 
   return (
     <Box
-      {...getStyles("root")}
+      {...getStyles('root')}
       component="svg"
       {...others}
       xmlns="http://www.w3.org/2000/svg"
@@ -194,4 +185,4 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
 });
 
 Spinner.classes = classes;
-Spinner.displayName = "Spinner";
+Spinner.displayName = 'Spinner';
