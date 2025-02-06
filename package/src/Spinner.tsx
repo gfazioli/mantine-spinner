@@ -2,9 +2,16 @@ import {
   Box,
   BoxProps,
   Factory,
+  MantineColor,
+  MantineSize,
   StylesApiProps,
   createVarsResolver,
   factory,
+  getSize,
+  getThemeColor,
+  parseThemeColor,
+  px,
+  useMantineTheme,
   useProps,
   useStyles,
 } from "@mantine/core";
@@ -12,19 +19,35 @@ import React from "react";
 
 import classes from "./Spinner.module.css";
 
+export type SpinnerDirection = "clockwise" | "counter-clockwise";
+
 export type SpinnerStylesNames = "root";
 
 export type SpinnerCssVariables = {
-  root: "--spinner-animation-duration";
+  root: "--spinner-size" | "--spinner-color" | "--spinner-animation-duration";
 };
 
 export interface SpinnerBaseProps {
-  size?: number;
-  inner?: number;
+  /** Controls `width` and `height` of the spinner. `Spinner` has predefined `xs`-`xl` values. Numbers are converted to rem. Default value is `'md'` */
+  size?: MantineSize | (string & {}) | number;
+
+  /** Controls size of inner part of the spinner, number is converted to rem. Default value is `8` */
+  inner?: MantineSize | (string & {}) | number;
+
+  /** Number of spinner segments. Default value is `12` */
   segments?: number;
+
+  /** Controls spinner thickness, number is converted to rem. Default value is `3` */
   thickness?: number;
+
+  /** Animation duration in ms, default value is `1200` */
   speed?: number;
-  color?: string;
+
+  /** Spinner animation direction */
+  direction?: SpinnerDirection;
+
+  /** Key of `theme.colors` or any valid CSS color, default value is `theme.primaryColor`  */
+  color?: MantineColor;
 }
 
 export interface SpinnerProps
@@ -40,24 +63,30 @@ export type SpinnerFactory = Factory<{
 }>;
 
 export const defaultProps: Partial<SpinnerProps> = {
-  size: 140,
-  inner: 44,
-  segments: 22,
-  thickness: 4,
-  speed: 1150,
-  color: "#006d8f",
+  size: "md",
+  inner: 8,
+  segments: 12,
+  thickness: 3,
+  speed: 1200,
+  direction: "clockwise",
 };
 
-const varsResolver = createVarsResolver<SpinnerFactory>((theme, { speed }) => {
-  return {
-    root: {
-      "--spinner-animation-duration": `${speed || 1}ms`,
-    },
-  };
-});
+const varsResolver = createVarsResolver<SpinnerFactory>(
+  (theme, { size, inner, color, speed }) => {
+    return {
+      root: {
+        "--spinner-size": getSize(size, "spinner-size"),
+        "--spinner-inner": getSize(inner, "spinner-inner"),
+        "--spinner-color": color ? getThemeColor(color, theme) : undefined,
+        "--spinner-animation-duration": `${speed || 1}ms`,
+      },
+    };
+  },
+);
 
 export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   const props = useProps("Spinner", defaultProps, _props);
+  const theme = useMantineTheme();
 
   const [over, setOver] = React.useState(false);
 
@@ -68,6 +97,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     thickness,
     speed,
     color,
+    direction,
 
     classNames,
     style,
@@ -84,10 +114,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     props,
     classes,
     className,
-    style: {
-      ...style,
-      "--spinner-play-state": over && pauseOnHover ? "paused" : "running",
-    },
+    style,
     classNames,
     styles,
     unstyled,
@@ -95,11 +122,36 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     varsResolver,
   });
 
-  const fixedSize = 220;
-  const center = fixedSize / 2;
+  const getSizeValue = (size: MantineSize | (string & {}) | number): number => {
+    if (
+      typeof size === "string" &&
+      ["lg", "xl", "md", "sm", "xs"].includes(size)
+    ) {
+      return {
+        xl: 58,
+        lg: 44,
+        md: 36,
+        sm: 22,
+        xs: 18,
+      }[size];
+    }
+
+    return px(size) as number;
+  };
+
+  const sizeValue = getSizeValue(size);
+  const innerValue = getSizeValue(inner);
+  const center = sizeValue / 2;
   const maxRadius = center - thickness;
-  const radius = Math.min(size / 2, maxRadius);
-  const innerRadius = Math.min(inner, radius);
+  const radius = Math.min(sizeValue / 2, maxRadius);
+  const innerRadius = Math.min(innerValue, radius);
+
+  const directionValue = direction === "counter-clockwise" ? -1 : 1;
+
+  const parsedColor = parseThemeColor({
+    color: color || theme.primaryColor,
+    theme,
+  });
 
   return (
     <Box
@@ -107,9 +159,9 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
       component="svg"
       {...others}
       xmlns="http://www.w3.org/2000/svg"
-      width={220}
-      height={220}
-      viewBox="0 0 220 220"
+      width={sizeValue}
+      height={sizeValue}
+      viewBox={`0 0 ${sizeValue} ${sizeValue}`}
       preserveAspectRatio="xMidYMid meet"
     >
       {Array.from({ length: segments }).map((_, index) => {
@@ -123,15 +175,16 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
 
         return (
           <line
+            key={`line-${index}`}
             className={classes.line}
             x1={x1}
             y1={y1}
             x2={x2}
             y2={y2}
-            stroke={color}
+            stroke={parsedColor.value}
             strokeWidth={thickness}
             style={{
-              animationDelay: `${(index * speed) / segments}ms`,
+              animationDelay: `${(index * speed * directionValue) / segments}ms`,
             }}
           />
         );

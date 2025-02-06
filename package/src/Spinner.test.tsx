@@ -1,10 +1,10 @@
-import { render, tests } from '@mantine-tests/core';
-import React from 'react';
-import { Spinner, SpinnerProps, SpinnerStylesNames } from './Spinner';
+import { render, tests } from "@mantine-tests/core";
+import React from "react";
+import { Spinner, SpinnerProps, SpinnerStylesNames } from "./Spinner";
 
 const defaultProps: SpinnerProps = {};
 
-describe('@mantine/core/Spinner', () => {
+describe("@mantine/core/Spinner", () => {
   tests.itSupportsSystemProps<SpinnerProps, SpinnerStylesNames>({
     component: Spinner,
     props: defaultProps,
@@ -13,12 +13,14 @@ describe('@mantine/core/Spinner', () => {
     classes: true,
     id: true,
     refType: HTMLDivElement,
-    displayName: '@mantine/core/Spinner',
-    stylesApiSelectors: ['root'],
+    displayName: "@mantine/core/Spinner",
+    stylesApiSelectors: ["root"],
   });
 
-  it('supports perspective prop', () => {
-    const { container } = render(<Spinner gap="500px" />);
-    expect(container.querySelector('.mantine-Spinner-root')).toHaveStyle({ perspective: '500px' });
+  it("supports perspective prop", () => {
+    const { container } = render(<Spinner />);
+    expect(container.querySelector(".mantine-Spinner-root")).toHaveStyle({
+      perspective: "500px",
+    });
   });
 });
