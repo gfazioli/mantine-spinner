@@ -1,8 +1,10 @@
 # Mantine Spinner Component
 
-<p align="center">
-  <img width="866" alt="image" src="https://github.com/gfazioli/mantine-spinner/assets/432181/d9d37b48-ab49-44c7-9315-4ad9a48e70f8">
-</p>
+<div align="center">
+
+https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
+
+</div>
 
 ---
 
