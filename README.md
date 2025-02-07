@@ -23,7 +23,7 @@ https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
 
-It allows to create a spinner effect with any content.
+It allows to create a spinner effect.
 
 You can find more components on the [Mantine Extensions Hub](https://mantine-extensions.vercel.app/) library.
 
