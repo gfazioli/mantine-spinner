@@ -1,7 +1,7 @@
 {
   "author": "Giovambattista Fazioli <giovambattista.fazioli@gmail.com>",
   "bugs": "https://github.com/gfazioli/mantine-spinner/issues",
-  "description": "Spinner component is a wrapper for any component that can be flipped. It is used to create cards, flip boxes and more.",
+  "description": "A Mantine React component offers customizable loading animations to enhance the user experience in React applications.",
   "exports": {
     ".": {
       "import": {
