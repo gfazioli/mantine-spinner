@@ -12,6 +12,7 @@ https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
   
   [![NPM version](https://img.shields.io/npm/v/%40gfazioli%2Fmantine-spinner?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-spinner)
   [![NPM Downloads](https://img.shields.io/npm/dm/%40gfazioli%2Fmantine-spinner?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-spinner)
+  [![NPM Downloads](https://img.shields.io/npm/dy/%40gfazioli%2Fmantine-spinner?style=for-the-badge&label=%20&color=f90)](https://www.npmjs.com/package/@gfazioli/mantine-spinner)
   ![NPM License](https://img.shields.io/npm/l/%40gfazioli%2Fmantine-spinner?style=for-the-badge)
 
 </div>

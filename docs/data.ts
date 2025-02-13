@@ -28,7 +28,7 @@ export const PACKAGE_DATA: PackageData = {
   packageName: '@gfazioli/mantine-spinner',
   packageDescription:
     'A Mantine React component offers customizable loading animations to enhance the user experience in React applications.',
-  mdxFileUrl: 'https://github.com/gfazioli/mantine-spinner/blob/master/docs/pages/index.mdx',
+  mdxFileUrl: 'https://github.com/gfazioli/mantine-spinner/blob/master/docs/docs.mdx',
   repositoryUrl: 'https://github.com/gfazioli/mantine-spinner',
   licenseUrl: 'https://github.com/gfazioli/mantine-spinner/blob/master/LICENSE',
   author: {
