@@ -69,6 +69,7 @@ const moduleCss = `
 export const styled: MantineDemo = {
   type: 'code',
   component: Demo,
+  defaultExpanded: false,
   code: [
     { fileName: 'Demo.tsx', code },
     { fileName: 'Spinner.module.css', code: moduleCss },
