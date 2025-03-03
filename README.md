@@ -24,9 +24,20 @@ https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
 
-It allows to create a spinner effect.
+[![Mantine UI Library](https://img.shields.io/badge/-MANTINE_UI_LIBRARY-blue?style=for-the-badge&labelColor=black&logo=mantine
+)](https://mantine.dev/)
 
-You can find more components on the [Mantine Extensions Hub](https://mantine-extensions.vercel.app/) library.
+The component enables the creation of a captivating spinner effect, which enhances the visual dynamics of a user interface. This effect can be used to draw attention, indicate loading processes, or provide an interactive experience that engages users effectively. By implementing this spinner effect, developers can improve the overall aesthetic appeal and functionality of their applications, ensuring a more seamless and enjoyable user experience.
+
+[![Video](https://img.shields.io/badge/-Watch_the_Video-blue?style=for-the-badge&labelColor=black&logo=youtube
+)](https://youtu.be/KBb--0hVdX4)
+[![Demo and Documentation](https://img.shields.io/badge/-Demo_%26_Documentation-blue?style=for-the-badge&labelColor=black&logo=typescript
+)](https://gfazioli.github.io/mantine-spinner/)
+[![Mantine Extensions HUB](https://img.shields.io/badge/-Mantine_Extensions_Hub-blue?style=for-the-badge&labelColor=blue
+)](https://mantine-extensions.vercel.app/)
+
+
+👉 You can find more components on the [Mantine Extensions Hub](https://mantine-extensions.vercel.app/) library.
 
 ## Installation
 
