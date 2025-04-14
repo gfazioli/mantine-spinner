@@ -98,6 +98,8 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     speed,
     color,
     direction,
+    transitionTimingFunction,
+    strokeLinecap,
 
     classNames,
     style,
