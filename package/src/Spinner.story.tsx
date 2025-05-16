@@ -46,6 +46,6 @@ export function Usage(props: SpinnerProps) {
   return <Spinner {...props} />;
 }
 
-export function Properties(props: SpinnerProps) {
+export function Properties() {
   return <Spinner />;
 }

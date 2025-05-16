@@ -74,7 +74,7 @@ export const defaultProps: Partial<SpinnerProps> = {
 };
 
 const varsResolver = createVarsResolver<SpinnerFactory>(
-  (theme, { strokeLinecap, speed, transitionTimingFunction }) => {
+  (_, { strokeLinecap, speed, transitionTimingFunction }) => {
     return {
       root: {
         '--spinner-stroke-linecap': strokeLinecap,
@@ -163,41 +163,43 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   }
 
   return (
-    <Box
-      {...getStyles('root')}
-      component="svg"
-      {...others}
-      xmlns="http://www.w3.org/2000/svg"
-      width={sizeValue}
-      height={sizeValue}
-      viewBox={`0 0 ${sizeValue} ${sizeValue}`}
-      preserveAspectRatio="xMidYMid meet"
-    >
-      {Array.from({ length: segments }).map((_, index) => {
-        const angle = (360 / segments) * index - 90;
-        const rad = (angle * Math.PI) / 180;
+    <Box ref={ref}>
+      <Box
+        {...getStyles('root')}
+        component="svg"
+        {...others}
+        xmlns="http://www.w3.org/2000/svg"
+        width={sizeValue}
+        height={sizeValue}
+        viewBox={`0 0 ${sizeValue} ${sizeValue}`}
+        preserveAspectRatio="xMidYMid meet"
+      >
+        {Array.from({ length: segments }).map((_, index) => {
+          const angle = (360 / segments) * index - 90;
+          const rad = (angle * Math.PI) / 180;
 
-        const x1 = center + innerRadius * Math.cos(rad);
-        const y1 = center + innerRadius * Math.sin(rad);
-        const x2 = center + radius * Math.cos(rad);
-        const y2 = center + radius * Math.sin(rad);
+          const x1 = center + innerRadius * Math.cos(rad);
+          const y1 = center + innerRadius * Math.sin(rad);
+          const x2 = center + radius * Math.cos(rad);
+          const y2 = center + radius * Math.sin(rad);
 
-        return (
-          <line
-            key={`line-${index}`}
-            className={classes.line}
-            x1={x1}
-            y1={y1}
-            x2={x2}
-            y2={y2}
-            stroke={parsedColor.value}
-            strokeWidth={thickness}
-            style={{
-              animationDelay: `${(index * speed * directionValue) / segments}ms`,
-            }}
-          />
-        );
-      })}
+          return (
+            <line
+              key={`line-${index}`}
+              className={classes.line}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke={parsedColor.value}
+              strokeWidth={thickness}
+              style={{
+                animationDelay: `${(index * speed * directionValue) / segments}ms`,
+              }}
+            />
+          );
+        })}
+      </Box>
     </Box>
   );
 });
