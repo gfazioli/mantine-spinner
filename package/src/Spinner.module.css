@@ -14,9 +14,11 @@
   0% {
     opacity: 0;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
@@ -24,9 +26,6 @@
 
 .line {
   opacity: 0;
-}
-
-.line {
   transform-origin: center;
   stroke-linecap: var(--spinner-stroke-linecap);
   animation-name: fade;
