@@ -1,6 +1,6 @@
 {
   "name": "@gfazioli/mantine-spinner",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A Mantine React component offers customizable loading animations to enhance the user experience in React applications.",
   "homepage": "https://gfazioli.github.io/mantine-spinner/",
   "packageManager": "yarn@4.0.1",
