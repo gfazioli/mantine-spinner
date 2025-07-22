@@ -86,9 +86,14 @@ const varsResolver = createVarsResolver<SpinnerFactory>(
 );
 
 export const Spinner = factory<SpinnerFactory>((_props, ref) => {
+  const [isClient, setIsClient] = useState(false);
+
   const props = useProps('Spinner', defaultProps, _props);
   const theme = useMantineTheme();
   const [invalidate, setInvalidate] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const {
     size,
@@ -158,7 +163,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     }
   }, [segments]);
 
-  if (invalidate) {
+  if (invalidate || !isClient) {
     return null;
   }
 
