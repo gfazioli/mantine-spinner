@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Spinner, SpinnerProps } from '@gfazioli/mantine-spinner';
+import { CodeHighlight } from '@mantine/code-highlight';
 import { Button, Center, Stack } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
-import { CodeHighlight } from '@mantinex/shiki';
 
 function Demo() {
   const [props, setProps] = useState<SpinnerProps>();
@@ -47,8 +47,9 @@ function Demo() {
         <Button onClick={random}>Random</Button>
       </Stack>
       <CodeHighlight
+        w={{ base: 'auto', lg: 800 }}
+        radius={32}
         language="tsx"
-        style={{ overflow: 'auto', maxHeight: 400 }}
         code={`<Spinner ${codeProps} />`}
       />
     </>

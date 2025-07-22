@@ -1,15 +1,20 @@
 import { Spinner, SpinnerProps } from '@gfazioli/mantine-spinner';
+import { Center } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
 
 function Demo(props: SpinnerProps) {
-  return <Spinner {...props} />;
+  return (
+    <Center h={400}>
+      <Spinner {...props} />
+    </Center>
+  );
 }
 
 const code = `
 import { Spinner } from "@gfazioli/mantine-spinner";
 
 function Demo() {
-  return <Spinner {{props}} />;
+  return <Spinner{{props}} />;
 }
 `;
 
@@ -17,6 +22,7 @@ export const configurator: MantineDemo = {
   type: 'configurator',
   component: Demo,
   code,
+  maxWidth: 290,
   centered: true,
   controls: [
     {
@@ -50,7 +56,7 @@ export const configurator: MantineDemo = {
       type: 'number',
       prop: 'thickness',
       min: 1,
-      max: 10,
+      max: 32,
       step: 1,
       initialValue: 4,
       libraryValue: 4,

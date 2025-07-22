@@ -71,7 +71,7 @@ export const styled: MantineDemo = {
   component: Demo,
   defaultExpanded: false,
   code: [
-    { fileName: 'Demo.tsx', code },
-    { fileName: 'Spinner.module.css', code: moduleCss },
+    { fileName: 'Demo.tsx', code, language: 'tsx' },
+    { fileName: 'Spinner.module.css', code: moduleCss, language: 'css' },
   ],
 };
