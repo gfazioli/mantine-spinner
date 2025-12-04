@@ -1,12 +1,6 @@
 # Mantine Spinner Component
 
-<div align="center">
-
-https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
-
-</div>
-
----
+<img width="2752" height="1536" alt="Gemini_Generated_Image_pqng5mpqng5mpqng" src="https://github.com/user-attachments/assets/04ba3ba6-d036-4f1e-b6e8-a6273cfa6813" />
 
 <div align="center">
   
@@ -69,5 +63,13 @@ function Demo() {
 <div align="center">
   
 [![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-spinner&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-spinner&Timeline)
+
+---
+
+<div align="center">
+
+https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
+
+</div>
 
 </div>
