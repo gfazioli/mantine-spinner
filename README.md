@@ -18,20 +18,14 @@
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
 
-[![Mantine UI Library](https://img.shields.io/badge/-MANTINE_UI_LIBRARY-blue?style=for-the-badge&labelColor=black&logo=mantine
-)](https://mantine.dev/)
+[Mantine Spinner](https://gfazioli.github.io/mantine-spinner/) is a dedicated React component designed to deliver smooth, customizable loading animations within Mantine-based applications. It exposes controls for visual tuning—including overall size, inner radius, segment count, stroke thickness, and animation speed—so you can match your brand and context, from subtle inline loaders to prominent page-level indicators. 
 
-The component enables the creation of a captivating spinner effect, which enhances the visual dynamics of a user interface. This effect can be used to draw attention, indicate loading processes, or provide an interactive experience that engages users effectively. By implementing this spinner effect, developers can improve the overall aesthetic appeal and functionality of their applications, ensuring a more seamless and enjoyable user experience.
+To avoid hydration mismatches in SSR environments, the spinner renders exclusively on the client because its SVG geometry relies on floating‑point math that may differ between server and browser. Styling is provided via package CSS (with an optional ‎`@layer mantine-spinner` import) to integrate cleanly with modern CSS layering and Mantine’s design system, resulting in a dependable, visually consistent loading experience.
 
-[![Mantine Extensions](https://img.shields.io/badge/-Watch_the_Video-blue?style=for-the-badge&labelColor=black&logo=youtube
-)](https://www.youtube.com/playlist?list=PL85tTROKkZrWyqCcmNCdWajpx05-cTal4)
-[![Demo and Documentation](https://img.shields.io/badge/-Demo_%26_Documentation-blue?style=for-the-badge&labelColor=black&logo=typescript
-)](https://gfazioli.github.io/mantine-spinner/)
-[![Mantine Extensions HUB](https://img.shields.io/badge/-Mantine_Extensions_Hub-blue?style=for-the-badge&labelColor=blue
-)](https://mantine-extensions.vercel.app/)
+> [!note]
+>
+> → [Demo and Documentation](https://gfazioli.github.io/mantine-spinner/) → [Youtube Video](https://www.youtube.com/playlist?list=PL85tTROKkZrWyqCcmNCdWajpx05-cTal4) → [More Mantine Components](https://mantine-extensions.vercel.app/)
 
-
-👉 You can find more components on the [Mantine Extensions Hub](https://mantine-extensions.vercel.app/) library.
 
 ## Installation
 
@@ -60,11 +54,8 @@ function Demo() {
 }
 ```
 
-<div align="center">
-  
-[![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-spinner&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-spinner&Timeline)
-
-
-</div>
-
+---
 https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
+
+---  
+[![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-spinner&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-spinner&Timeline)
