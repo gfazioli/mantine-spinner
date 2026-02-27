@@ -1,6 +1,6 @@
 # Mantine Spinner Component
 
-<img alt="mantine Spinner" src="https://github.com/gfazioli/mantine-spinner/blob/master/logo.png" />
+<img alt="mantine Spinner" src="https://github.com/gfazioli/mantine-spinner/blob/master/logo.jpeg" />
 
 <div align="center">
   
