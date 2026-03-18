@@ -15,6 +15,7 @@ export type {
   SpinnerFactory,
   SpinnerGradient,
   SpinnerProps,
+  SpinnerSegmentShape,
   SpinnerStylesNames,
   SpinnerVariant,
 } from './Spinner';
