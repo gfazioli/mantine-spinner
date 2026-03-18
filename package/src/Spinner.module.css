@@ -4,6 +4,7 @@
   --spinner-play-state: running;
   --spinner-min-opacity: 0;
   --spinner-max-opacity: 1;
+  overflow: visible;
 }
 
 @keyframes spinner-fade {
