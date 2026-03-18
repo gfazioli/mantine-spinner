@@ -377,6 +377,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
 
         if (segmentShape === 'arc') {
           const midRadius = (innerRadius + radius) / 2;
+          // Each arc fills 70% of its angular slot, leaving 30% as visible gap
           const arcSpan = ((360 / segments) * 0.7 * Math.PI) / 180;
           const startRad = rad - arcSpan / 2;
           const endRad = rad + arcSpan / 2;
