@@ -1,0 +1,8 @@
+.group {
+  display: inline-grid;
+  place-items: center;
+}
+
+.group > * {
+  grid-area: 1 / 1;
+}

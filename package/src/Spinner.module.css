@@ -50,6 +50,16 @@
   }
 }
 
+@keyframes spinner-trail {
+  from {
+    opacity: var(--spinner-max-opacity);
+  }
+
+  to {
+    opacity: var(--spinner-min-opacity);
+  }
+}
+
 .line {
   opacity: var(--spinner-min-opacity);
   transform-origin: center;
@@ -68,6 +78,15 @@
 
 .line[data-variant='grow'] {
   animation-name: spinner-grow;
+}
+
+.line[data-variant='trail'] {
+  animation-name: spinner-trail;
+  animation-timing-function: linear;
+}
+
+.line[data-progress] {
+  animation: none;
 }
 
 .line[data-reduced-motion] {

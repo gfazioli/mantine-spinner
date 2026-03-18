@@ -77,6 +77,7 @@ export const configurator: MantineDemo = {
         { label: 'Fade', value: 'fade' },
         { label: 'Pulse', value: 'pulse' },
         { label: 'Grow', value: 'grow' },
+        { label: 'Trail', value: 'trail' },
       ],
       initialValue: 'fade',
       libraryValue: 'fade',

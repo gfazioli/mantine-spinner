@@ -19,7 +19,7 @@ import classes from './Spinner.module.css';
 
 export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
 
-export type SpinnerVariant = 'fade' | 'pulse' | 'grow';
+export type SpinnerVariant = 'fade' | 'pulse' | 'grow' | 'trail';
 
 export type SpinnerStylesNames = 'root' | 'line' | 'content';
 
@@ -32,6 +32,13 @@ export type SpinnerCssVariables = {
     | '--spinner-min-opacity'
     | '--spinner-max-opacity';
 };
+
+export interface SpinnerGradient {
+  /** Start color of the gradient */
+  from: MantineColor;
+  /** End color of the gradient */
+  to: MantineColor;
+}
 
 export interface SpinnerBaseProps {
   /** Controls `width` and `height` of the spinner. `Spinner` has predefined `xs`-`xl` values. Numbers are converted to rem. Default value is `'md'` */
@@ -75,6 +82,12 @@ export interface SpinnerBaseProps {
 
   /** Array of colors to cycle through for each segment. Overrides `color` when provided */
   colors?: MantineColor[];
+
+  /** Gradient applied across segments, interpolating from `from` to `to`. Overrides `color` and `colors` */
+  gradient?: SpinnerGradient;
+
+  /** Determinate progress value (0–100). When set, segments fill proportionally and animation is disabled */
+  progress?: number;
 
   /** Content rendered centered inside the spinner */
   children?: React.ReactNode;
@@ -125,6 +138,34 @@ function getSizeValue(size: MantineSize | (string & {}) | number): number {
   return px(size) as number;
 }
 
+function parseRgb(color: string): [number, number, number] {
+  if (color.startsWith('#')) {
+    const hex =
+      color.length === 4
+        ? `${color[1]}${color[1]}${color[2]}${color[2]}${color[3]}${color[3]}`
+        : color.slice(1, 7);
+    return [
+      parseInt(hex.slice(0, 2), 16),
+      parseInt(hex.slice(2, 4), 16),
+      parseInt(hex.slice(4, 6), 16),
+    ];
+  }
+  const match = color.match(/(\d+)/g);
+  if (match && match.length >= 3) {
+    return [+match[0], +match[1], +match[2]];
+  }
+  return [0, 0, 0];
+}
+
+function interpolateColor(from: string, to: string, t: number): string {
+  const [r1, g1, b1] = parseRgb(from);
+  const [r2, g2, b2] = parseRgb(to);
+  const r = Math.round(r1 + (r2 - r1) * t);
+  const g = Math.round(g1 + (g2 - g1) * t);
+  const b = Math.round(b1 + (b2 - b1) * t);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 const varsResolver = createVarsResolver<SpinnerFactory>(
   (_, { strokeLinecap, duration, transitionTimingFunction, paused, minOpacity, maxOpacity }) => {
     return {
@@ -162,6 +203,8 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     minOpacity,
     maxOpacity,
     colors,
+    gradient,
+    progress,
     children,
     variant,
 
@@ -199,14 +242,25 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   }, [size, inner, segments, thickness]);
 
   const parsedColors = useMemo(() => {
+    if (gradient) {
+      const fromColor = parseThemeColor({ color: gradient.from, theme }).value;
+      const toColor = parseThemeColor({ color: gradient.to, theme }).value;
+      return Array.from({ length: segments }, (_, i) =>
+        interpolateColor(fromColor, toColor, segments > 1 ? i / (segments - 1) : 0)
+      );
+    }
     if (colors && colors.length > 0) {
       return colors.map((c) => parseThemeColor({ color: c, theme }).value);
     }
     return [parseThemeColor({ color: color || theme.primaryColor, theme }).value];
-  }, [colors, color, theme]);
+  }, [gradient, colors, color, theme, segments]);
 
   const directionValue = direction === 'counter-clockwise' ? -1 : 1;
   const { sizeValue, center, radius, innerRadius } = geometry;
+  const isProgress = progress !== undefined;
+  const filledCount = isProgress
+    ? Math.round((Math.min(Math.max(progress, 0), 100) / 100) * segments)
+    : 0;
 
   if (!mounted) {
     return null;
@@ -239,21 +293,22 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
         const x2 = center + radius * Math.cos(rad);
         const y2 = center + radius * Math.sin(rad);
 
+        const lineStyle = isProgress
+          ? { opacity: index < filledCount ? maxOpacity : minOpacity }
+          : { animationDelay: `${(index * duration * directionValue) / segments}ms` };
+
         return (
           <line
             key={`${segments}-${index}`}
-            {...getStyles('line', {
-              style: {
-                animationDelay: `${(index * duration * directionValue) / segments}ms`,
-              },
-            })}
+            {...getStyles('line', { style: lineStyle })}
             x1={x1}
             y1={y1}
             x2={x2}
             y2={y2}
             stroke={parsedColors[index % parsedColors.length]}
             strokeWidth={thickness}
-            data-variant={variant}
+            data-variant={isProgress ? undefined : variant}
+            data-progress={isProgress || undefined}
             data-reduced-motion={shouldReduceMotion || undefined}
           />
         );
