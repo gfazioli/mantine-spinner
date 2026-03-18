@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   Box,
   BoxProps,
@@ -14,15 +14,23 @@ import {
   useProps,
   useStyles,
 } from '@mantine/core';
-import { useDidUpdate, useMounted } from '@mantine/hooks';
+import { useMounted, useReducedMotion } from '@mantine/hooks';
 import classes from './Spinner.module.css';
 
 export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
 
-export type SpinnerStylesNames = 'root';
+export type SpinnerVariant = 'fade' | 'pulse' | 'grow';
+
+export type SpinnerStylesNames = 'root' | 'line' | 'content';
 
 export type SpinnerCssVariables = {
-  root: '--spinner-animation-duration' | '--spinner-stroke-linecap' | '--spinner-timing-function';
+  root:
+    | '--spinner-animation-duration'
+    | '--spinner-stroke-linecap'
+    | '--spinner-timing-function'
+    | '--spinner-play-state'
+    | '--spinner-min-opacity'
+    | '--spinner-max-opacity';
 };
 
 export interface SpinnerBaseProps {
@@ -38,8 +46,8 @@ export interface SpinnerBaseProps {
   /** Controls spinner thickness, number is converted to rem. Default value is `3` */
   thickness?: number;
 
-  /** Animation duration in ms, default value is `1200` */
-  speed?: number;
+  /** Animation cycle duration in ms, default value is `1200` */
+  duration?: number;
 
   /** Spinner animation direction */
   direction?: SpinnerDirection;
@@ -50,17 +58,39 @@ export interface SpinnerBaseProps {
   /** Stroke linecap property */
   strokeLinecap?: 'round' | 'square' | 'butt';
 
-  /** Key of `theme.colors` or any valid CSS color, default value is `theme.primaryColor`  */
+  /** Key of `theme.colors` or any valid CSS color, default value is `theme.primaryColor` */
   color?: MantineColor;
+
+  /** Accessible label for the spinner. Set to `null` to hide from assistive technology. Default value is `"Loading"` */
+  label?: string | null;
+
+  /** When `true`, pauses the spinner animation. Default value is `false` */
+  paused?: boolean;
+
+  /** Minimum opacity for segments during animation. Default value is `0` */
+  minOpacity?: number;
+
+  /** Maximum opacity for segments during animation. Default value is `1` */
+  maxOpacity?: number;
+
+  /** Array of colors to cycle through for each segment. Overrides `color` when provided */
+  colors?: MantineColor[];
+
+  /** Content rendered centered inside the spinner */
+  children?: React.ReactNode;
 }
 
-export interface SpinnerProps extends BoxProps, SpinnerBaseProps, StylesApiProps<SpinnerFactory> {}
+export interface SpinnerProps extends BoxProps, SpinnerBaseProps, StylesApiProps<SpinnerFactory> {
+  /** Animation variant. Default value is `'fade'` */
+  variant?: SpinnerVariant;
+}
 
 export type SpinnerFactory = Factory<{
   props: SpinnerProps;
   ref: SVGSVGElement;
   stylesNames: SpinnerStylesNames;
   vars: SpinnerCssVariables;
+  variant: SpinnerVariant;
 }>;
 
 export const defaultProps: Partial<SpinnerProps> = {
@@ -68,10 +98,15 @@ export const defaultProps: Partial<SpinnerProps> = {
   inner: 8,
   segments: 12,
   thickness: 3,
-  speed: 1200,
+  duration: 1200,
   direction: 'clockwise',
   strokeLinecap: 'round',
   transitionTimingFunction: 'ease',
+  label: 'Loading',
+  paused: false,
+  minOpacity: 0,
+  maxOpacity: 1,
+  variant: 'fade',
 };
 
 const SIZE_VALUES: Record<string, number> = {
@@ -91,12 +126,15 @@ function getSizeValue(size: MantineSize | (string & {}) | number): number {
 }
 
 const varsResolver = createVarsResolver<SpinnerFactory>(
-  (_, { strokeLinecap, speed, transitionTimingFunction }) => {
+  (_, { strokeLinecap, duration, transitionTimingFunction, paused, minOpacity, maxOpacity }) => {
     return {
       root: {
         '--spinner-stroke-linecap': strokeLinecap,
-        '--spinner-animation-duration': `${speed || 1}ms`,
+        '--spinner-animation-duration': `${duration || 1}ms`,
         '--spinner-timing-function': transitionTimingFunction,
+        '--spinner-play-state': paused ? 'paused' : 'running',
+        '--spinner-min-opacity': String(minOpacity ?? 0),
+        '--spinner-max-opacity': String(maxOpacity ?? 1),
       },
     };
   }
@@ -104,25 +142,28 @@ const varsResolver = createVarsResolver<SpinnerFactory>(
 
 export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   const mounted = useMounted();
-  const [segmentsKey, setSegmentsKey] = useState(0);
-
   const props = useProps('Spinner', defaultProps, _props);
   const theme = useMantineTheme();
-
-  useDidUpdate(() => {
-    setSegmentsKey((prev) => prev + 1);
-  }, [props.segments]);
+  const reducedMotion = useReducedMotion();
+  const shouldReduceMotion = theme.respectReducedMotion && reducedMotion;
 
   const {
     size,
     inner,
     segments,
     thickness,
-    speed,
+    duration,
     color,
     direction,
     transitionTimingFunction,
     strokeLinecap,
+    label,
+    paused,
+    minOpacity,
+    maxOpacity,
+    colors,
+    children,
+    variant,
 
     classNames,
     style,
@@ -147,26 +188,37 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     varsResolver,
   });
 
-  const sizeValue = getSizeValue(size);
-  const innerValue = getSizeValue(inner);
-  const center = sizeValue / 2;
-  const maxRadius = center - thickness;
-  const radius = Math.min(sizeValue / 2, maxRadius);
-  const innerRadius = Math.min(innerValue, radius);
-  const directionValue = direction === 'counter-clockwise' ? -1 : 1;
+  const geometry = useMemo(() => {
+    const sizeValue = getSizeValue(size);
+    const innerValue = getSizeValue(inner);
+    const center = sizeValue / 2;
+    const maxRadius = center - thickness;
+    const radius = Math.min(sizeValue / 2, maxRadius);
+    const innerRadius = Math.min(innerValue, radius);
+    return { sizeValue, center, radius, innerRadius };
+  }, [size, inner, segments, thickness]);
 
-  const parsedColor = parseThemeColor({
-    color: color || theme.primaryColor,
-    theme,
-  });
+  const parsedColors = useMemo(() => {
+    if (colors && colors.length > 0) {
+      return colors.map((c) => parseThemeColor({ color: c, theme }).value);
+    }
+    return [parseThemeColor({ color: color || theme.primaryColor, theme }).value];
+  }, [colors, color, theme]);
+
+  const directionValue = direction === 'counter-clockwise' ? -1 : 1;
+  const { sizeValue, center, radius, innerRadius } = geometry;
 
   if (!mounted) {
     return null;
   }
 
+  const accessibilityProps =
+    label === null
+      ? { 'aria-hidden': true as const }
+      : { role: 'status' as const, 'aria-label': label };
+
   return (
     <Box
-      key={segmentsKey}
       ref={ref}
       {...getStyles('root')}
       component="svg"
@@ -176,8 +228,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
       height={sizeValue}
       viewBox={`0 0 ${sizeValue} ${sizeValue}`}
       preserveAspectRatio="xMidYMid meet"
-      role="status"
-      aria-label="Loading"
+      {...accessibilityProps}
     >
       {Array.from({ length: segments }).map((_, index) => {
         const angle = (360 / segments) * index - 90;
@@ -190,20 +241,38 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
 
         return (
           <line
-            key={`line-${index}`}
-            className={classes.line}
+            key={`${segments}-${index}`}
+            {...getStyles('line', {
+              style: {
+                animationDelay: `${(index * duration * directionValue) / segments}ms`,
+              },
+            })}
             x1={x1}
             y1={y1}
             x2={x2}
             y2={y2}
-            stroke={parsedColor.value}
+            stroke={parsedColors[index % parsedColors.length]}
             strokeWidth={thickness}
-            style={{
-              animationDelay: `${(index * speed * directionValue) / segments}ms`,
-            }}
+            data-variant={variant}
+            data-reduced-motion={shouldReduceMotion || undefined}
           />
         );
       })}
+      {children && (
+        <foreignObject x="0" y="0" width={sizeValue} height={sizeValue} {...getStyles('content')}>
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {children}
+          </div>
+        </foreignObject>
+      )}
     </Box>
   );
 });

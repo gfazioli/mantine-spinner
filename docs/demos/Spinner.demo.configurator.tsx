@@ -63,12 +63,23 @@ export const configurator: MantineDemo = {
     },
     {
       type: 'number',
-      prop: 'speed',
+      prop: 'duration',
       min: 400,
       max: 8400,
       step: 1,
       initialValue: 1200,
       libraryValue: 1200,
+    },
+    {
+      type: 'segmented',
+      prop: 'variant',
+      data: [
+        { label: 'Fade', value: 'fade' },
+        { label: 'Pulse', value: 'pulse' },
+        { label: 'Grow', value: 'grow' },
+      ],
+      initialValue: 'fade',
+      libraryValue: 'fade',
     },
     {
       type: 'segmented',
@@ -82,7 +93,7 @@ export const configurator: MantineDemo = {
       libraryValue: 'round',
     },
     {
-      type: 'segmented',
+      type: 'select',
       prop: 'direction',
       data: [
         { label: 'Clockwise', value: 'clockwise' },
@@ -90,6 +101,12 @@ export const configurator: MantineDemo = {
       ],
       initialValue: 'clockwise',
       libraryValue: 'clockwise',
+    },
+    {
+      type: 'boolean',
+      prop: 'paused',
+      initialValue: false,
+      libraryValue: false,
     },
     {
       type: 'color',

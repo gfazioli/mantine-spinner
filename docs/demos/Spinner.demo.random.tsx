@@ -31,12 +31,12 @@ function Demo() {
       inner: randomInRange({ min: 0, max: 100, step: 1 }),
       segments: randomInRange({ min: 8, max: 64, step: 1 }),
       thickness: randomInRange({ min: 1, max: 10, step: 1 }),
-      speed: randomInRange({ min: 100, max: 2000, step: 100 }),
+      duration: randomInRange({ min: 100, max: 2000, step: 100 }),
       color: randomColor,
     });
   }
 
-  const codeProps = `size={${props?.size}} inner={${props?.inner}} segments={${props?.segments}} thickness={${props?.thickness}} speed={${props?.speed}} color="${props?.color}"`;
+  const codeProps = `size={${props?.size}} inner={${props?.inner}} segments={${props?.segments}} thickness={${props?.thickness}} duration={${props?.duration}} color="${props?.color}"`;
 
   return (
     <>

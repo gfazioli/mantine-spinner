@@ -1,29 +1,80 @@
 .root {
   --spinner-stroke-linecap: round;
   --spinner-timing-function: ease;
+  --spinner-play-state: running;
+  --spinner-min-opacity: 0;
+  --spinner-max-opacity: 1;
 }
 
-@keyframes fade {
+@keyframes spinner-fade {
   0% {
-    opacity: 0;
+    opacity: var(--spinner-min-opacity);
   }
 
   50% {
-    opacity: 1;
+    opacity: var(--spinner-max-opacity);
   }
 
   100% {
-    opacity: 0;
+    opacity: var(--spinner-min-opacity);
+  }
+}
+
+@keyframes spinner-pulse {
+  0%,
+  100% {
+    opacity: var(--spinner-min-opacity);
+    transform: scale(0.6);
+  }
+
+  50% {
+    opacity: var(--spinner-max-opacity);
+    transform: scale(1.3);
+  }
+}
+
+@keyframes spinner-grow {
+  0% {
+    opacity: var(--spinner-min-opacity);
+    stroke-dashoffset: 100%;
+  }
+
+  50% {
+    opacity: var(--spinner-max-opacity);
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    opacity: var(--spinner-min-opacity);
+    stroke-dashoffset: 100%;
   }
 }
 
 .line {
-  opacity: 0;
+  opacity: var(--spinner-min-opacity);
   transform-origin: center;
   stroke-linecap: var(--spinner-stroke-linecap);
-  animation-name: fade;
+  animation-name: spinner-fade;
   animation-timing-function: var(--spinner-timing-function);
   animation-iteration-count: infinite;
   animation-fill-mode: forwards;
   animation-duration: var(--spinner-animation-duration, 1s);
+  animation-play-state: var(--spinner-play-state);
+}
+
+.line[data-variant='pulse'] {
+  animation-name: spinner-pulse;
+}
+
+.line[data-variant='grow'] {
+  animation-name: spinner-grow;
+}
+
+.line[data-reduced-motion] {
+  animation: none;
+  opacity: var(--spinner-max-opacity);
+}
+
+.content {
+  overflow: visible;
 }
