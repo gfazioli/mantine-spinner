@@ -10,6 +10,7 @@ export const SpinnerStylesApi: StylesApiData<SpinnerFactory> = {
     root: {
       '--spinner-stroke-linecap': 'Stroke linecap',
       '--spinner-animation-duration': 'Duration of the animation',
+      '--spinner-timing-function': 'Animation timing function',
     },
   },
 
