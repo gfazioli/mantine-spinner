@@ -86,8 +86,20 @@ export interface SpinnerBaseProps {
   /** Gradient applied across segments, interpolating from `from` to `to`. Overrides `color` and `colors` */
   gradient?: SpinnerGradient;
 
+  /** Shorthand for `gradient.from`. When both `gradientFrom` and `gradientTo` are set, creates a gradient. Overridden by `gradient` */
+  gradientFrom?: MantineColor;
+
+  /** Shorthand for `gradient.to`. When both `gradientFrom` and `gradientTo` are set, creates a gradient. Overridden by `gradient` */
+  gradientTo?: MantineColor;
+
   /** Determinate progress value (0–100). When set, segments fill proportionally and animation is disabled */
   progress?: number;
+
+  /** Adds a glow/bloom effect around each segment using an SVG filter. Pass `true` for default intensity (3) or a number to control the blur radius. Default value is `false` */
+  glow?: boolean | number;
+
+  /** Continuously rotates the hue of the entire spinner, creating a rainbow cycling effect. Default value is `false` */
+  hueRotate?: boolean;
 
   /** Content rendered centered inside the spinner */
   children?: React.ReactNode;
@@ -120,6 +132,8 @@ export const defaultProps: Partial<SpinnerProps> = {
   minOpacity: 0,
   maxOpacity: 1,
   variant: 'fade',
+  glow: false,
+  hueRotate: false,
 };
 
 const SIZE_VALUES: Record<string, number> = {
@@ -187,6 +201,8 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   const theme = useMantineTheme();
   const reducedMotion = useReducedMotion();
   const shouldReduceMotion = theme.respectReducedMotion && reducedMotion;
+  const reactId = React.useId();
+  const filterId = `spinner-glow-${reactId.replace(/:/g, '')}`;
 
   const {
     size,
@@ -204,7 +220,11 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     maxOpacity,
     colors,
     gradient,
+    gradientFrom,
+    gradientTo,
     progress,
+    glow,
+    hueRotate,
     children,
     variant,
 
@@ -241,10 +261,13 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     return { sizeValue, center, radius, innerRadius };
   }, [size, inner, segments, thickness]);
 
+  const effectiveGradient =
+    gradient || (gradientFrom && gradientTo ? { from: gradientFrom, to: gradientTo } : undefined);
+
   const parsedColors = useMemo(() => {
-    if (gradient) {
-      const fromColor = parseThemeColor({ color: gradient.from, theme }).value;
-      const toColor = parseThemeColor({ color: gradient.to, theme }).value;
+    if (effectiveGradient) {
+      const fromColor = parseThemeColor({ color: effectiveGradient.from, theme }).value;
+      const toColor = parseThemeColor({ color: effectiveGradient.to, theme }).value;
       return Array.from({ length: segments }, (_, i) =>
         interpolateColor(fromColor, toColor, segments > 1 ? i / (segments - 1) : 0)
       );
@@ -253,7 +276,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
       return colors.map((c) => parseThemeColor({ color: c, theme }).value);
     }
     return [parseThemeColor({ color: color || theme.primaryColor, theme }).value];
-  }, [gradient, colors, color, theme, segments]);
+  }, [effectiveGradient, colors, color, theme, segments]);
 
   const directionValue = direction === 'counter-clockwise' ? -1 : 1;
   const { sizeValue, center, radius, innerRadius } = geometry;
@@ -261,6 +284,8 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   const filledCount = isProgress
     ? Math.round((Math.min(Math.max(progress, 0), 100) / 100) * segments)
     : 0;
+  const glowIntensity = typeof glow === 'number' ? glow : glow ? 3 : 0;
+  const needsGlow = glowIntensity > 0;
 
   if (!mounted) {
     return null;
@@ -283,7 +308,26 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
       viewBox={`0 0 ${sizeValue} ${sizeValue}`}
       preserveAspectRatio="xMidYMid meet"
       {...accessibilityProps}
+      data-hue-rotate={hueRotate || undefined}
     >
+      {needsGlow && (
+        <defs>
+          <filter
+            id={filterId}
+            filterUnits="userSpaceOnUse"
+            x={-sizeValue}
+            y={-sizeValue}
+            width={sizeValue * 3}
+            height={sizeValue * 3}
+          >
+            <feGaussianBlur stdDeviation={glowIntensity} result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+      )}
       {Array.from({ length: segments }).map((_, index) => {
         const angle = (360 / segments) * index - 90;
         const rad = (angle * Math.PI) / 180;
@@ -307,6 +351,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
             y2={y2}
             stroke={parsedColors[index % parsedColors.length]}
             strokeWidth={thickness}
+            filter={needsGlow ? `url(#${filterId})` : undefined}
             data-variant={isProgress ? undefined : variant}
             data-progress={isProgress || undefined}
             data-reduced-motion={shouldReduceMotion || undefined}

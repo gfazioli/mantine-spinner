@@ -61,6 +61,16 @@
   }
 }
 
+@keyframes spinner-hue-rotate {
+  from {
+    filter: hue-rotate(0deg);
+  }
+
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
 .line {
   opacity: var(--spinner-min-opacity);
   transform-origin: center;
@@ -93,6 +103,10 @@
 .line[data-reduced-motion] {
   animation: none;
   opacity: var(--spinner-max-opacity);
+}
+
+.root[data-hue-rotate] {
+  animation: spinner-hue-rotate 4s linear infinite;
 }
 
 .content {

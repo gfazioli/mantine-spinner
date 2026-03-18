@@ -32,6 +32,24 @@ The `trail` variant creates a classic sweeping tail effect, similar to the iOS/m
 
 <Demo data={demos.trail} />
 
+## Neon effect
+
+Combine `variant="trail"` with `glow` and a bright color for a neon tube effect. Set `minOpacity` to a value like `0.3` so segments appear always slightly lit. Control the glow intensity by passing a number to `glow`.
+
+<Demo data={demos.neon} />
+
+## Glow
+
+The `glow` prop adds a bloom/glow effect to any variant using an SVG gaussian blur filter. It can be combined with any variant, gradient, or color.
+
+<Demo data={demos.glowDemo} />
+
+## Hue rotate
+
+The `hueRotate` prop continuously cycles through the color spectrum, creating a rainbow effect on the entire spinner. It can be combined with any variant, glow, and gradient for spectacular results.
+
+<Demo data={demos.hueRotateDemo} />
+
 ## Gradient
 
 Use the `gradient` prop to interpolate colors across segments. The gradient transitions smoothly from `from` to `to`, overriding both `color` and `colors`.
