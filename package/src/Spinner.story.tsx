@@ -8,7 +8,7 @@ export default {
     inner: 44,
     segments: 22,
     thickness: 4,
-    speed: 1150,
+    duration: 1150,
     color: '#006d8f',
     direction: 'clockwise',
     strokeLinecap: 'round',
@@ -19,7 +19,7 @@ export default {
     inner: { control: { type: 'range', min: 0, max: 300, step: 1 } },
     segments: { control: { type: 'range', min: 0, max: 100, step: 1 } },
     thickness: { control: { type: 'range', min: 0, max: 100, step: 1 } },
-    speed: { control: { type: 'range', min: 400, max: 8400, step: 1 } },
+    duration: { control: { type: 'range', min: 400, max: 8400, step: 1 } },
     color: { control: 'color' },
     direction: {
       control: {

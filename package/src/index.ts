@@ -6,4 +6,5 @@ export type {
   SpinnerFactory,
   SpinnerProps,
   SpinnerStylesNames,
+  SpinnerVariant,
 } from './Spinner';
