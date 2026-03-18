@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   BoxProps,
@@ -14,6 +14,7 @@ import {
   useProps,
   useStyles,
 } from '@mantine/core';
+import { useDidUpdate, useMounted } from '@mantine/hooks';
 import classes from './Spinner.module.css';
 
 export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
@@ -21,7 +22,7 @@ export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
 export type SpinnerStylesNames = 'root';
 
 export type SpinnerCssVariables = {
-  root: '--spinner-animation-duration' | '--spinner-stroke-linecap';
+  root: '--spinner-animation-duration' | '--spinner-stroke-linecap' | '--spinner-timing-function';
 };
 
 export interface SpinnerBaseProps {
@@ -57,7 +58,7 @@ export interface SpinnerProps extends BoxProps, SpinnerBaseProps, StylesApiProps
 
 export type SpinnerFactory = Factory<{
   props: SpinnerProps;
-  ref: HTMLDivElement;
+  ref: SVGSVGElement;
   stylesNames: SpinnerStylesNames;
   vars: SpinnerCssVariables;
 }>;
@@ -73,6 +74,22 @@ export const defaultProps: Partial<SpinnerProps> = {
   transitionTimingFunction: 'ease',
 };
 
+const SIZE_VALUES: Record<string, number> = {
+  xl: 58,
+  lg: 44,
+  md: 36,
+  sm: 22,
+  xs: 18,
+};
+
+function getSizeValue(size: MantineSize | (string & {}) | number): number {
+  if (typeof size === 'string' && size in SIZE_VALUES) {
+    return SIZE_VALUES[size];
+  }
+
+  return px(size) as number;
+}
+
 const varsResolver = createVarsResolver<SpinnerFactory>(
   (_, { strokeLinecap, speed, transitionTimingFunction }) => {
     return {
@@ -86,14 +103,15 @@ const varsResolver = createVarsResolver<SpinnerFactory>(
 );
 
 export const Spinner = factory<SpinnerFactory>((_props, ref) => {
-  const [isClient, setIsClient] = useState(false);
+  const mounted = useMounted();
+  const [segmentsKey, setSegmentsKey] = useState(0);
 
   const props = useProps('Spinner', defaultProps, _props);
   const theme = useMantineTheme();
-  const [invalidate, setInvalidate] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+
+  useDidUpdate(() => {
+    setSegmentsKey((prev) => prev + 1);
+  }, [props.segments]);
 
   const {
     size,
@@ -129,20 +147,6 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     varsResolver,
   });
 
-  const getSizeValue = (size: MantineSize | (string & {}) | number): number => {
-    if (typeof size === 'string' && ['lg', 'xl', 'md', 'sm', 'xs'].includes(size)) {
-      return {
-        xl: 58,
-        lg: 44,
-        md: 36,
-        sm: 22,
-        xs: 18,
-      }[size];
-    }
-
-    return px(size) as number;
-  };
-
   const sizeValue = getSizeValue(size);
   const innerValue = getSizeValue(inner);
   const center = sizeValue / 2;
@@ -156,55 +160,50 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     theme,
   });
 
-  useEffect(() => {
-    if (!invalidate) {
-      setInvalidate(true);
-      setTimeout(() => setInvalidate(false), 500);
-    }
-  }, [segments]);
-
-  if (invalidate || !isClient) {
+  if (!mounted) {
     return null;
   }
 
   return (
-    <Box ref={ref}>
-      <Box
-        {...getStyles('root')}
-        component="svg"
-        {...others}
-        xmlns="http://www.w3.org/2000/svg"
-        width={sizeValue}
-        height={sizeValue}
-        viewBox={`0 0 ${sizeValue} ${sizeValue}`}
-        preserveAspectRatio="xMidYMid meet"
-      >
-        {Array.from({ length: segments }).map((_, index) => {
-          const angle = (360 / segments) * index - 90;
-          const rad = (angle * Math.PI) / 180;
+    <Box
+      key={segmentsKey}
+      ref={ref}
+      {...getStyles('root')}
+      component="svg"
+      {...others}
+      xmlns="http://www.w3.org/2000/svg"
+      width={sizeValue}
+      height={sizeValue}
+      viewBox={`0 0 ${sizeValue} ${sizeValue}`}
+      preserveAspectRatio="xMidYMid meet"
+      role="status"
+      aria-label="Loading"
+    >
+      {Array.from({ length: segments }).map((_, index) => {
+        const angle = (360 / segments) * index - 90;
+        const rad = (angle * Math.PI) / 180;
 
-          const x1 = center + innerRadius * Math.cos(rad);
-          const y1 = center + innerRadius * Math.sin(rad);
-          const x2 = center + radius * Math.cos(rad);
-          const y2 = center + radius * Math.sin(rad);
+        const x1 = center + innerRadius * Math.cos(rad);
+        const y1 = center + innerRadius * Math.sin(rad);
+        const x2 = center + radius * Math.cos(rad);
+        const y2 = center + radius * Math.sin(rad);
 
-          return (
-            <line
-              key={`line-${index}`}
-              className={classes.line}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke={parsedColor.value}
-              strokeWidth={thickness}
-              style={{
-                animationDelay: `${(index * speed * directionValue) / segments}ms`,
-              }}
-            />
-          );
-        })}
-      </Box>
+        return (
+          <line
+            key={`line-${index}`}
+            className={classes.line}
+            x1={x1}
+            y1={y1}
+            x2={x2}
+            y2={y2}
+            stroke={parsedColor.value}
+            strokeWidth={thickness}
+            style={{
+              animationDelay: `${(index * speed * directionValue) / segments}ms`,
+            }}
+          />
+        );
+      })}
     </Box>
   );
 });

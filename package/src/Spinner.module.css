@@ -1,11 +1,4 @@
 .root {
-  --spinner-size-xs: 18px;
-  --spinner-size-sm: 22px;
-  --spinner-size-md: 36px;
-  --spinner-size-lg: 44px;
-  --spinner-size-xl: 58px;
-  --spinner-size: var(--spinner-size-md);
-  --spinner-color: var(--mantine-primary-color-filled);
   --spinner-stroke-linecap: round;
   --spinner-timing-function: ease;
 }
