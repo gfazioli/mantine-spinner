@@ -266,12 +266,11 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     const radius = Math.min(sizeValue / 2, maxRadius);
     const innerRadius = Math.min(innerValue, radius);
     return { sizeValue, center, radius, innerRadius };
-  }, [size, inner, segments, thickness]);
-
-  const effectiveGradient =
-    gradient || (gradientFrom && gradientTo ? { from: gradientFrom, to: gradientTo } : undefined);
+  }, [size, inner, thickness]);
 
   const parsedColors = useMemo(() => {
+    const effectiveGradient =
+      gradient || (gradientFrom && gradientTo ? { from: gradientFrom, to: gradientTo } : undefined);
     if (effectiveGradient) {
       const fromColor = parseThemeColor({ color: effectiveGradient.from, theme }).value;
       const toColor = parseThemeColor({ color: effectiveGradient.to, theme }).value;
@@ -283,7 +282,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
       return colors.map((c) => parseThemeColor({ color: c, theme }).value);
     }
     return [parseThemeColor({ color: color || theme.primaryColor, theme }).value];
-  }, [effectiveGradient, colors, color, theme, segments]);
+  }, [gradient, gradientFrom, gradientTo, colors, color, theme, segments]);
 
   const directionValue = direction === 'counter-clockwise' ? -1 : 1;
   const { sizeValue, center, radius, innerRadius } = geometry;

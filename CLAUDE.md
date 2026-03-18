@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`@gfazioli/mantine-spinner` is a Mantine extension component that renders an SVG-based loading spinner with customizable segments, size, speed, and direction. It renders client-side only to avoid SSR hydration mismatches from floating-point SVG geometry.
+`@gfazioli/mantine-spinner` is a Mantine extension component that renders an SVG-based loading spinner with customizable segments, size, duration, direction, animation variants, segment shapes, gradient colors, glow effects, and more. It renders client-side only (via `useMounted`) to avoid SSR hydration mismatches from floating-point SVG geometry.
 
 ## Commands
 
@@ -28,12 +28,18 @@ This repo follows the standard Mantine Extensions template (`mantine-base-compon
 
 ### Component Structure
 
-The entire component is a single file: `package/src/Spinner.tsx`. It uses Mantine's `factory()` pattern with:
+The main component is `package/src/Spinner.tsx` using Mantine's `factory()` pattern with:
 - `useProps` for default props merging
-- `useStyles` + `createVarsResolver` for CSS variables (`--spinner-animation-duration`, `--spinner-stroke-linecap`, `--spinner-timing-function`)
-- CSS Modules via `Spinner.module.css` with a `fade` keyframe animation on each `<line>` segment
+- `useStyles` + `createVarsResolver` for CSS variables (`--spinner-animation-duration`, `--spinner-stroke-linecap`, `--spinner-timing-function`, `--spinner-play-state`, `--spinner-min-opacity`, `--spinner-max-opacity`)
+- CSS Modules via `Spinner.module.css` with multiple keyframe animations (`spinner-fade`, `spinner-pulse`, `spinner-grow`, `spinner-trail`, `spinner-hue-rotate`)
 
-The spinner renders `N` SVG `<line>` elements arranged radially, each with a staggered `animationDelay`. An `isClient` state gate prevents SSR rendering.
+The spinner renders `N` SVG elements (`<line>`, `<circle>`, or `<path>` depending on `segmentShape`) arranged radially, each with a staggered `animationDelay`. SSR rendering is prevented via `useMounted()` from `@mantine/hooks`.
+
+Compound components:
+- `SpinnerGroup.tsx` — CSS grid wrapper for concentric spinner stacking
+- `SpinnerOverlay.tsx` — Positioned overlay with backdrop blur and centered spinner
+
+These are attached via `Object.assign` in `index.ts` and accessible as `Spinner.Group` / `Spinner.Overlay`.
 
 ### Build Pipeline
 
