@@ -1,6 +1,9 @@
 export { configurator } from './Spinner.demo.configurator';
+export { glowDemo } from './Spinner.demo.glow';
 export { gradient } from './Spinner.demo.gradient';
 export { group } from './Spinner.demo.group';
+export { hueRotateDemo } from './Spinner.demo.hueRotate';
+export { neon } from './Spinner.demo.neon';
 export { overlay } from './Spinner.demo.overlay';
 export { progressDemo } from './Spinner.demo.progress';
 export { random } from './Spinner.demo.random';

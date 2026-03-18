@@ -219,6 +219,77 @@ describe('Spinner', () => {
     const filled = Array.from(lines).filter((l) => l.style.opacity === '1');
     expect(filled).toHaveLength(10);
   });
+
+  it('glow boolean renders SVG filter with default intensity', () => {
+    const { container } = render(<Spinner glow />);
+    const filter = container.querySelector('filter');
+    expect(filter).toBeTruthy();
+    const blur = container.querySelector('feGaussianBlur');
+    expect(blur).toHaveAttribute('stdDeviation', '3');
+  });
+
+  it('glow number renders SVG filter with custom intensity', () => {
+    const { container } = render(<Spinner glow={5} />);
+    const blur = container.querySelector('feGaussianBlur');
+    expect(blur).toHaveAttribute('stdDeviation', '5');
+  });
+
+  it('glow applies filter attribute to lines', () => {
+    const { container } = render(<Spinner glow />);
+    const line = container.querySelector('line');
+    expect(line?.getAttribute('filter')).toMatch(/url\(#spinner-glow/);
+  });
+
+  it('no filter when glow is 0 or false', () => {
+    const { container } = render(<Spinner variant="fade" />);
+    const filter = container.querySelector('filter');
+    expect(filter).toBeNull();
+    const line = container.querySelector('line');
+    expect(line?.getAttribute('filter')).toBeNull();
+  });
+
+  it('hueRotate sets data-hue-rotate on root', () => {
+    const { container } = render(<Spinner hueRotate />);
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('data-hue-rotate');
+  });
+
+  it('no data-hue-rotate when hueRotate is false', () => {
+    const { container } = render(<Spinner />);
+    const svg = container.querySelector('svg');
+    expect(svg).not.toHaveAttribute('data-hue-rotate');
+  });
+
+  it('glow and hueRotate work together', () => {
+    const { container } = render(<Spinner glow={3} hueRotate />);
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('data-hue-rotate');
+    const filter = container.querySelector('filter');
+    expect(filter).toBeTruthy();
+  });
+
+  it('gradientFrom and gradientTo create gradient', () => {
+    const { container } = render(
+      <Spinner segments={2} gradientFrom="#000000" gradientTo="#ffffff" />
+    );
+    const lines = container.querySelectorAll('line');
+    expect(lines[0].getAttribute('stroke')).toBe('rgb(0, 0, 0)');
+    expect(lines[1].getAttribute('stroke')).toBe('rgb(255, 255, 255)');
+  });
+
+  it('gradient prop overrides gradientFrom/gradientTo', () => {
+    const { container } = render(
+      <Spinner
+        segments={2}
+        gradientFrom="#ff0000"
+        gradientTo="#00ff00"
+        gradient={{ from: '#000000', to: '#ffffff' }}
+      />
+    );
+    const lines = container.querySelectorAll('line');
+    expect(lines[0].getAttribute('stroke')).toBe('rgb(0, 0, 0)');
+    expect(lines[1].getAttribute('stroke')).toBe('rgb(255, 255, 255)');
+  });
 });
 
 describe('SpinnerGroup', () => {

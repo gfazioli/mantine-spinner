@@ -71,7 +71,7 @@ export const configurator: MantineDemo = {
       libraryValue: 1200,
     },
     {
-      type: 'segmented',
+      type: 'select',
       prop: 'variant',
       data: [
         { label: 'Fade', value: 'fade' },
@@ -104,6 +104,21 @@ export const configurator: MantineDemo = {
       libraryValue: 'clockwise',
     },
     {
+      type: 'number',
+      prop: 'glow',
+      min: 0,
+      max: 10,
+      step: 1,
+      initialValue: 0,
+      libraryValue: 0,
+    },
+    {
+      type: 'boolean',
+      prop: 'hueRotate',
+      initialValue: false,
+      libraryValue: false,
+    },
+    {
       type: 'boolean',
       prop: 'paused',
       initialValue: false,
@@ -112,6 +127,18 @@ export const configurator: MantineDemo = {
     {
       type: 'color',
       prop: 'color',
+      initialValue: '',
+      libraryValue: '',
+    },
+    {
+      type: 'color',
+      prop: 'gradientFrom',
+      initialValue: '',
+      libraryValue: '',
+    },
+    {
+      type: 'color',
+      prop: 'gradientTo',
       initialValue: '',
       libraryValue: '',
     },

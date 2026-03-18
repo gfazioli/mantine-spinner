@@ -17,6 +17,8 @@ export default {
     transitionTimingFunction: 'ease',
     variant: 'fade',
     paused: false,
+    glow: false,
+    hueRotate: false,
     minOpacity: 0,
     maxOpacity: 1,
   },
@@ -43,6 +45,8 @@ export default {
       control: { type: 'select' },
       options: ['fade', 'pulse', 'grow', 'trail'],
     },
+    glow: { control: 'boolean' },
+    hueRotate: { control: 'boolean' },
     paused: { control: 'boolean' },
     minOpacity: { control: { type: 'range', min: 0, max: 1, step: 0.1 } },
     maxOpacity: { control: { type: 'range', min: 0, max: 1, step: 0.1 } },
@@ -88,6 +92,39 @@ export function ProgressMode() {
       />
       <span> {progress}%</span>
     </div>
+  );
+}
+
+export function NeonEffect() {
+  return (
+    <Spinner
+      size={100}
+      segments={16}
+      thickness={4}
+      inner={30}
+      variant="trail"
+      glow={3}
+      color="cyan"
+      minOpacity={0.3}
+    />
+  );
+}
+
+export function GlowEffect() {
+  return <Spinner size={100} segments={16} thickness={4} inner={30} glow={4} color="blue" />;
+}
+
+export function HueRotateEffect() {
+  return (
+    <Spinner
+      size={100}
+      segments={24}
+      thickness={4}
+      inner={30}
+      hueRotate
+      glow={4}
+      gradient={{ from: 'blue', to: 'cyan' }}
+    />
   );
 }
 
