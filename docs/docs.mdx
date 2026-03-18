@@ -26,6 +26,36 @@ The `Spinner` enables the creation of a captivating spinner effect, which enhanc
 
 <Demo data={demos.configurator} />
 
+## Trail variant
+
+The `trail` variant creates a classic sweeping tail effect, similar to the iOS/macOS activity indicator. Each segment fades out linearly, producing a smooth trailing animation.
+
+<Demo data={demos.trail} />
+
+## Gradient
+
+Use the `gradient` prop to interpolate colors across segments. The gradient transitions smoothly from `from` to `to`, overriding both `color` and `colors`.
+
+<Demo data={demos.gradient} />
+
+## Progress
+
+Set the `progress` prop (0–100) to use the spinner as a determinate progress indicator. Animation is disabled and segments fill proportionally. Combine with `children` to display a label.
+
+<Demo data={demos.progressDemo} />
+
+## Spinner.Group
+
+`Spinner.Group` stacks multiple spinners concentrically, aligning them on the same center point. This is useful for creating layered ring effects.
+
+<Demo data={demos.group} />
+
+## Spinner.Overlay
+
+`Spinner.Overlay` wraps content and displays a semi-transparent overlay with a centered spinner on top. Control visibility with the `visible` prop and blur with the `blur` prop.
+
+<Demo data={demos.overlay} />
+
 ## Styled
 
 Of course, you can style the spinner as you like. For example, by adding an additional animation effect on the whole spinner.
