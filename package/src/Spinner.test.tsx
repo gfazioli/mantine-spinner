@@ -277,6 +277,59 @@ describe('Spinner', () => {
     expect(lines[1].getAttribute('stroke')).toBe('rgb(255, 255, 255)');
   });
 
+  it('progress mode uses role="progressbar" with ARIA attributes', () => {
+    const { container } = render(<Spinner progress={65} />);
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('role', 'progressbar');
+    expect(svg).toHaveAttribute('aria-valuenow', '65');
+    expect(svg).toHaveAttribute('aria-valuemin', '0');
+    expect(svg).toHaveAttribute('aria-valuemax', '100');
+    expect(svg).toHaveAttribute('aria-label', 'Loading');
+  });
+
+  it('non-progress mode uses role="status"', () => {
+    const { container } = render(<Spinner />);
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('role', 'status');
+    expect(svg).not.toHaveAttribute('aria-valuenow');
+  });
+
+  it('segmentShape dot renders circle elements', () => {
+    const { container } = render(<Spinner segmentShape="dot" segments={4} />);
+    const circles = container.querySelectorAll('circle');
+    expect(circles).toHaveLength(4);
+    const lines = container.querySelectorAll('line');
+    expect(lines).toHaveLength(0);
+  });
+
+  it('segmentShape dot uses fill for color', () => {
+    const { container } = render(<Spinner segmentShape="dot" color="red" />);
+    const circle = container.querySelector('circle');
+    expect(circle).toHaveAttribute('fill');
+    expect(circle).not.toHaveAttribute('stroke-width');
+  });
+
+  it('segmentShape arc renders path elements', () => {
+    const { container } = render(<Spinner segmentShape="arc" segments={4} />);
+    const paths = container.querySelectorAll('path');
+    expect(paths).toHaveLength(4);
+    const lines = container.querySelectorAll('line');
+    expect(lines).toHaveLength(0);
+  });
+
+  it('segmentShape arc uses stroke for color', () => {
+    const { container } = render(<Spinner segmentShape="arc" color="red" />);
+    const path = container.querySelector('path');
+    expect(path).toHaveAttribute('stroke');
+    expect(path).toHaveAttribute('fill', 'none');
+  });
+
+  it('segmentShape defaults to line', () => {
+    const { container } = render(<Spinner segments={4} />);
+    const lines = container.querySelectorAll('line');
+    expect(lines).toHaveLength(4);
+  });
+
   it('gradient prop overrides gradientFrom/gradientTo', () => {
     const { container } = render(
       <Spinner

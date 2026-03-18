@@ -83,6 +83,17 @@ export const configurator: MantineDemo = {
       libraryValue: 'fade',
     },
     {
+      type: 'select',
+      prop: 'segmentShape',
+      data: [
+        { label: 'Line', value: 'line' },
+        { label: 'Dot', value: 'dot' },
+        { label: 'Arc', value: 'arc' },
+      ],
+      initialValue: 'line',
+      libraryValue: 'line',
+    },
+    {
       type: 'segmented',
       prop: 'strokeLinecap',
       data: [

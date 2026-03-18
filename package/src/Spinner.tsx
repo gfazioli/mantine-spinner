@@ -21,6 +21,8 @@ export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
 
 export type SpinnerVariant = 'fade' | 'pulse' | 'grow' | 'trail';
 
+export type SpinnerSegmentShape = 'line' | 'dot' | 'arc';
+
 export type SpinnerStylesNames = 'root' | 'line' | 'content';
 
 export type SpinnerCssVariables = {
@@ -92,7 +94,7 @@ export interface SpinnerBaseProps {
   /** Shorthand for `gradient.to`. When both `gradientFrom` and `gradientTo` are set, creates a gradient. Overridden by `gradient` */
   gradientTo?: MantineColor;
 
-  /** Determinate progress value (0–100). When set, segments fill proportionally and animation is disabled */
+  /** Determinate progress value (0–100). When set, segments fill proportionally and animation is disabled. Uses `role="progressbar"` with ARIA attributes */
   progress?: number;
 
   /** Adds a glow/bloom effect around each segment using an SVG filter. Pass `true` for default intensity (3) or a number to control the blur radius. Default value is `false` */
@@ -100,6 +102,9 @@ export interface SpinnerBaseProps {
 
   /** Continuously rotates the hue of the entire spinner, creating a rainbow cycling effect. Default value is `false` */
   hueRotate?: boolean;
+
+  /** Shape of individual segments. Default value is `'line'` */
+  segmentShape?: SpinnerSegmentShape;
 
   /** Content rendered centered inside the spinner */
   children?: React.ReactNode;
@@ -134,6 +139,7 @@ export const defaultProps: Partial<SpinnerProps> = {
   variant: 'fade',
   glow: false,
   hueRotate: false,
+  segmentShape: 'line',
 };
 
 const SIZE_VALUES: Record<string, number> = {
@@ -225,6 +231,7 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     progress,
     glow,
     hueRotate,
+    segmentShape,
     children,
     variant,
 
@@ -291,10 +298,19 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     return null;
   }
 
+  const clampedProgress = isProgress ? Math.round(Math.min(Math.max(progress, 0), 100)) : undefined;
   const accessibilityProps =
     label === null
       ? { 'aria-hidden': true as const }
-      : { role: 'status' as const, 'aria-label': label };
+      : isProgress
+        ? {
+            role: 'progressbar' as const,
+            'aria-label': label,
+            'aria-valuenow': clampedProgress,
+            'aria-valuemin': 0,
+            'aria-valuemax': 100,
+          }
+        : { role: 'status' as const, 'aria-label': label };
 
   return (
     <Box
@@ -341,20 +357,49 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
           ? { opacity: index < filledCount ? maxOpacity : minOpacity }
           : { animationDelay: `${(index * duration * directionValue) / segments}ms` };
 
+        const segColor = parsedColors[index % parsedColors.length];
+
+        const commonProps = {
+          key: `${segments}-${index}`,
+          ...getStyles('line', { style: lineStyle }),
+          filter: needsGlow ? `url(#${filterId})` : undefined,
+          'data-variant': isProgress ? undefined : variant,
+          'data-progress': isProgress || undefined,
+          'data-reduced-motion': shouldReduceMotion || undefined,
+        };
+
+        if (segmentShape === 'dot') {
+          const midRadius = (innerRadius + radius) / 2;
+          const cx = center + midRadius * Math.cos(rad);
+          const cy = center + midRadius * Math.sin(rad);
+          const dotR = (radius - innerRadius) / 2;
+          return <circle {...commonProps} cx={cx} cy={cy} r={dotR} fill={segColor} />;
+        }
+
+        if (segmentShape === 'arc') {
+          const midRadius = (innerRadius + radius) / 2;
+          const arcSpan = ((360 / segments) * 0.7 * Math.PI) / 180;
+          const startRad = rad - arcSpan / 2;
+          const endRad = rad + arcSpan / 2;
+          const sx = center + midRadius * Math.cos(startRad);
+          const sy = center + midRadius * Math.sin(startRad);
+          const ex = center + midRadius * Math.cos(endRad);
+          const ey = center + midRadius * Math.sin(endRad);
+          const d = `M ${sx} ${sy} A ${midRadius} ${midRadius} 0 0 1 ${ex} ${ey}`;
+          return (
+            <path {...commonProps} d={d} stroke={segColor} strokeWidth={thickness} fill="none" />
+          );
+        }
+
         return (
           <line
-            key={`${segments}-${index}`}
-            {...getStyles('line', { style: lineStyle })}
+            {...commonProps}
             x1={x1}
             y1={y1}
             x2={x2}
             y2={y2}
-            stroke={parsedColors[index % parsedColors.length]}
+            stroke={segColor}
             strokeWidth={thickness}
-            filter={needsGlow ? `url(#${filterId})` : undefined}
-            data-variant={isProgress ? undefined : variant}
-            data-progress={isProgress || undefined}
-            data-reduced-motion={shouldReduceMotion || undefined}
           />
         );
       })}

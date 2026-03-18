@@ -16,6 +16,7 @@ export default {
     strokeLinecap: 'round',
     transitionTimingFunction: 'ease',
     variant: 'fade',
+    segmentShape: 'line',
     paused: false,
     glow: false,
     hueRotate: false,
@@ -44,6 +45,10 @@ export default {
     variant: {
       control: { type: 'select' },
       options: ['fade', 'pulse', 'grow', 'trail'],
+    },
+    segmentShape: {
+      control: { type: 'select' },
+      options: ['line', 'dot', 'arc'],
     },
     glow: { control: 'boolean' },
     hueRotate: { control: 'boolean' },
@@ -93,6 +98,14 @@ export function ProgressMode() {
       <span> {progress}%</span>
     </div>
   );
+}
+
+export function DotShape() {
+  return <Spinner size={100} segments={16} thickness={4} inner={30} segmentShape="dot" />;
+}
+
+export function ArcShape() {
+  return <Spinner size={100} segments={16} thickness={4} inner={30} segmentShape="arc" />;
 }
 
 export function NeonEffect() {

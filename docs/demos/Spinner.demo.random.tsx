@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Spinner, SpinnerProps, SpinnerVariant } from '@gfazioli/mantine-spinner';
+import {
+  Spinner,
+  SpinnerProps,
+  SpinnerSegmentShape,
+  SpinnerVariant,
+} from '@gfazioli/mantine-spinner';
 import { CodeHighlight } from '@mantine/code-highlight';
 import { Button, Center, Stack } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
@@ -7,6 +12,7 @@ import { MantineDemo } from '@mantinex/demo';
 const VARIANTS: SpinnerVariant[] = ['fade', 'pulse', 'grow', 'trail'];
 const DIRECTIONS = ['clockwise', 'counter-clockwise'] as const;
 const LINECAPS = ['round', 'square', 'butt'] as const;
+const SHAPES: SpinnerSegmentShape[] = ['line', 'dot', 'arc'];
 
 function Demo() {
   const [props, setProps] = useState<SpinnerProps>();
@@ -40,6 +46,7 @@ function Demo() {
     const glow = Math.random() > 0.6 ? randomInRange({ min: 2, max: 6, step: 1 }) : 0;
     const hueRotate = Math.random() > 0.7;
     const variant = pick(VARIANTS);
+    const shape = pick(SHAPES);
 
     setProps({
       size: randomInRange({ min: 60, max: 200, step: 1 }),
@@ -48,6 +55,7 @@ function Demo() {
       thickness: randomInRange({ min: 1, max: 10, step: 1 }),
       duration: randomInRange({ min: 400, max: 2000, step: 100 }),
       variant,
+      segmentShape: shape,
       direction: pick(DIRECTIONS),
       strokeLinecap: pick(LINECAPS),
       color: useGradient ? undefined : randomColor(),
@@ -66,6 +74,9 @@ function Demo() {
     `thickness={${props?.thickness}}`,
     `duration={${props?.duration}}`,
     `variant="${props?.variant}"`,
+    props?.segmentShape && props.segmentShape !== 'line'
+      ? `segmentShape="${props.segmentShape}"`
+      : null,
     `direction="${props?.direction}"`,
     `strokeLinecap="${props?.strokeLinecap}"`,
     props?.color ? `color="${props.color}"` : null,
