@@ -4,7 +4,7 @@ import type { StylesApiData } from '../components/styles-api.types';
 export const SpinnerStylesApi: StylesApiData<SpinnerFactory> = {
   selectors: {
     root: 'Root element',
-    line: 'Individual spinner segment line',
+    line: 'Individual spinner segment (line, dot, or arc depending on segmentShape)',
     content: 'Content wrapper (foreignObject) for children',
   },
 

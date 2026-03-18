@@ -22,7 +22,20 @@
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
 
-[Mantine Spinner](https://gfazioli.github.io/mantine-spinner/) is a dedicated React component designed to deliver smooth, customizable loading animations within Mantine-based applications. It exposes controls for visual tuning—including overall size, inner radius, segment count, stroke thickness, and animation speed—so you can match your brand and context, from subtle inline loaders to prominent page-level indicators. 
+[Mantine Spinner](https://gfazioli.github.io/mantine-spinner/) is a feature-rich React component designed to deliver smooth, customizable loading animations within Mantine-based applications. It exposes controls for visual tuning—including overall size, inner radius, segment count, stroke thickness, animation duration, direction, and much more—so you can match your brand and context, from subtle inline loaders to prominent page-level indicators.
+
+### Features
+
+- **Animation variants** — `fade`, `pulse`, `grow`, `trail` with customizable timing
+- **Segment shapes** — `line`, `dot`, `arc` for different visual styles
+- **Gradient colors** — Smooth color interpolation across segments
+- **Glow effect** — SVG gaussian blur filter with adjustable intensity
+- **Hue rotation** — Continuous rainbow color cycling
+- **Progress mode** — Determinate progress indicator (0–100%) with `role="progressbar"`
+- **Compound components** — `Spinner.Group` for concentric stacking, `Spinner.Overlay` for loading overlays
+- **Accessibility** — `role="status"`, `aria-label`, `prefers-reduced-motion` support
+- **Children support** — Render centered content inside the spinner
+- **Mantine Styles API** — Full `classNames`, `styles`, and CSS variables support
 
 To avoid hydration mismatches in SSR environments, the spinner renders exclusively on the client because its SVG geometry relies on floating‑point math that may differ between server and browser. Styling is provided via package CSS (with an optional ‎`@layer mantine-spinner` import) to integrate cleanly with modern CSS layering and Mantine’s design system, resulting in a dependable, visually consistent loading experience.
 
@@ -57,7 +70,34 @@ function Demo() {
   return <Spinner />;
 }
 ```
-H## Sponsor
+
+### More examples
+
+```tsx
+// Trail variant with glow (neon effect)
+<Spinner variant="trail" glow={3} color="cyan" minOpacity={0.3} />
+
+// Dot shape with gradient
+<Spinner segmentShape="dot" gradient={{ from: 'blue', to: 'cyan' }} />
+
+// Progress indicator with label
+<Spinner progress={65} color="teal">
+  <Text>65%</Text>
+</Spinner>
+
+// Concentric group
+<Spinner.Group>
+  <Spinner size={100} color="blue" />
+  <Spinner size={60} color="cyan" direction="counter-clockwise" />
+</Spinner.Group>
+
+// Loading overlay
+<Spinner.Overlay visible={isLoading}>
+  <Card>Content</Card>
+</Spinner.Overlay>
+```
+
+## Sponsor
 
 <div align="center">
 

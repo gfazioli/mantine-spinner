@@ -29,7 +29,11 @@ export const SpinnerOverlay = React.forwardRef<HTMLDivElement, SpinnerOverlayPro
       {visible && (
         <div
           className={classes.overlay}
-          style={blur ? { backdropFilter: `blur(${blur}px)` } : undefined}
+          style={
+            blur
+              ? { backdropFilter: `blur(${blur}px)`, WebkitBackdropFilter: `blur(${blur}px)` }
+              : undefined
+          }
         >
           <Spinner {...spinnerProps} />
         </div>
