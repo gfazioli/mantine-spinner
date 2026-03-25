@@ -4,6 +4,10 @@ import { defaultProps, Spinner } from './Spinner';
 import { SpinnerGroup } from './SpinnerGroup';
 import { SpinnerOverlay } from './SpinnerOverlay';
 
+// Attach compound components for testing
+Spinner.Group = SpinnerGroup;
+Spinner.Overlay = SpinnerOverlay;
+
 describe('Spinner', () => {
   it('renders without crashing', () => {
     const { container } = render(<Spinner />);
@@ -346,38 +350,56 @@ describe('Spinner', () => {
 });
 
 describe('SpinnerGroup', () => {
+  it('is accessible as Spinner.Group', () => {
+    expect(Spinner.Group).toBe(SpinnerGroup);
+  });
+
   it('renders children', () => {
     const { container } = render(
-      <SpinnerGroup>
+      <Spinner.Group>
         <Spinner />
         <Spinner />
-      </SpinnerGroup>
+      </Spinner.Group>
     );
     const svgs = container.querySelectorAll('svg');
     expect(svgs).toHaveLength(2);
   });
 
   it('has correct displayName', () => {
-    expect(SpinnerGroup.displayName).toBe('SpinnerGroup');
+    expect(Spinner.Group.displayName).toBe('SpinnerGroup');
   });
 
   it('applies className', () => {
     const { container } = render(
-      <SpinnerGroup className="custom-group">
+      <Spinner.Group className="custom-group">
         <Spinner />
-      </SpinnerGroup>
+      </Spinner.Group>
     );
     const group = container.querySelector('.custom-group');
     expect(group).toBeTruthy();
   });
+
+  it('supports classNames prop', () => {
+    const { container } = render(
+      <Spinner.Group classNames={{ root: 'custom-root' }}>
+        <Spinner />
+      </Spinner.Group>
+    );
+    const root = container.querySelector('.custom-root');
+    expect(root).toBeTruthy();
+  });
 });
 
 describe('SpinnerOverlay', () => {
+  it('is accessible as Spinner.Overlay', () => {
+    expect(Spinner.Overlay).toBe(SpinnerOverlay);
+  });
+
   it('renders overlay when visible', () => {
     const { container } = render(
-      <SpinnerOverlay visible>
+      <Spinner.Overlay visible>
         <div>Content</div>
-      </SpinnerOverlay>
+      </Spinner.Overlay>
     );
     const svg = container.querySelector('svg');
     expect(svg).toBeTruthy();
@@ -385,9 +407,9 @@ describe('SpinnerOverlay', () => {
 
   it('hides overlay when not visible', () => {
     const { container } = render(
-      <SpinnerOverlay visible={false}>
+      <Spinner.Overlay visible={false}>
         <div>Content</div>
-      </SpinnerOverlay>
+      </Spinner.Overlay>
     );
     const svg = container.querySelector('svg');
     expect(svg).toBeNull();
@@ -395,24 +417,34 @@ describe('SpinnerOverlay', () => {
 
   it('renders children content', () => {
     const { container } = render(
-      <SpinnerOverlay visible={false}>
+      <Spinner.Overlay visible={false}>
         <div data-testid="content">Content</div>
-      </SpinnerOverlay>
+      </Spinner.Overlay>
     );
     expect(container.querySelector('[data-testid="content"]')).toBeTruthy();
   });
 
   it('has correct displayName', () => {
-    expect(SpinnerOverlay.displayName).toBe('SpinnerOverlay');
+    expect(Spinner.Overlay.displayName).toBe('SpinnerOverlay');
   });
 
   it('passes spinnerProps to inner Spinner', () => {
     const { container } = render(
-      <SpinnerOverlay visible spinnerProps={{ segments: 8 }}>
+      <Spinner.Overlay visible spinnerProps={{ segments: 8 }}>
         <div>Content</div>
-      </SpinnerOverlay>
+      </Spinner.Overlay>
     );
     const lines = container.querySelectorAll('line');
     expect(lines).toHaveLength(8);
+  });
+
+  it('supports classNames prop', () => {
+    const { container } = render(
+      <Spinner.Overlay classNames={{ root: 'custom-root', overlay: 'custom-overlay' }}>
+        <div>Content</div>
+      </Spinner.Overlay>
+    );
+    expect(container.querySelector('.custom-root')).toBeTruthy();
+    expect(container.querySelector('.custom-overlay')).toBeTruthy();
   });
 });

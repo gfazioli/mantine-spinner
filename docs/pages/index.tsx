@@ -12,8 +12,9 @@ export default function HomePage() {
       <PageHeader data={PACKAGE_DATA} />
       <DocsTabs
         docgen={docgen}
-        componentsProps={['Spinner']}
-        componentsStyles={['Spinner']}
+        componentsProps={['Spinner', 'SpinnerGroup', 'SpinnerOverlay']}
+        componentsStyles={['Spinner', 'SpinnerGroup', 'SpinnerOverlay']}
+        componentPrefix="Spinner"
         stylesApiData={STYLES_API_DATA}
       >
         <Docs />

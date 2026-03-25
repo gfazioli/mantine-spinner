@@ -5,7 +5,11 @@ const getComponentPath = (componentPath: string) =>
   path.join(process.cwd(), 'package/src', componentPath);
 
 generateDeclarations({
-  componentsPaths: [getComponentPath('Spinner.tsx')],
+  componentsPaths: [
+    getComponentPath('Spinner.tsx'),
+    getComponentPath('SpinnerGroup.tsx'),
+    getComponentPath('SpinnerOverlay.tsx'),
+  ],
   tsConfigPath: path.join(process.cwd(), 'tsconfig.json'),
   outputPath: path.join(process.cwd(), 'docs'),
 });
