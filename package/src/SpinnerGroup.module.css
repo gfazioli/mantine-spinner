@@ -1,8 +1,8 @@
-.group {
+.root {
   display: inline-grid;
   place-items: center;
 }
 
-.group > * {
+.root > * {
   grid-area: 1 / 1;
 }

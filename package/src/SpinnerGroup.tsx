@@ -1,16 +1,54 @@
 import React from 'react';
-import { Box, BoxProps, ElementProps } from '@mantine/core';
+import {
+  Box,
+  BoxProps,
+  ElementProps,
+  Factory,
+  factory,
+  StylesApiProps,
+  useProps,
+  useStyles,
+} from '@mantine/core';
 import classes from './SpinnerGroup.module.css';
 
-export interface SpinnerGroupProps extends BoxProps, ElementProps<'div'> {
+export type SpinnerGroupStylesNames = 'root';
+
+export interface SpinnerGroupProps
+  extends BoxProps, StylesApiProps<SpinnerGroupFactory>, ElementProps<'div'> {
   /** Spinner components to stack concentrically */
   children: React.ReactNode;
 }
 
-export const SpinnerGroup = React.forwardRef<HTMLDivElement, SpinnerGroupProps>(
-  ({ className, ...others }, ref) => (
-    <Box ref={ref} {...others} className={[classes.group, className].filter(Boolean).join(' ')} />
-  )
-);
+export type SpinnerGroupFactory = Factory<{
+  props: SpinnerGroupProps;
+  ref: HTMLDivElement;
+  stylesNames: SpinnerGroupStylesNames;
+}>;
 
+const defaultProps: Partial<SpinnerGroupProps> = {};
+
+export const SpinnerGroup = factory<SpinnerGroupFactory>((_props, ref) => {
+  const props = useProps('SpinnerGroup', defaultProps, _props);
+  const { children, classNames, className, style, styles, unstyled, vars, ...others } = props;
+
+  const getStyles = useStyles<SpinnerGroupFactory>({
+    name: 'SpinnerGroup',
+    props,
+    classes,
+    className,
+    style,
+    classNames,
+    styles,
+    unstyled,
+    vars,
+  });
+
+  return (
+    <Box ref={ref} {...getStyles('root')} {...others}>
+      {children}
+    </Box>
+  );
+});
+
+SpinnerGroup.classes = classes;
 SpinnerGroup.displayName = 'SpinnerGroup';

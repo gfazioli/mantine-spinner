@@ -15,6 +15,8 @@ import {
   useStyles,
 } from '@mantine/core';
 import { useMounted, useReducedMotion } from '@mantine/hooks';
+import type { SpinnerGroup } from './SpinnerGroup';
+import type { SpinnerOverlay } from './SpinnerOverlay';
 import classes from './Spinner.module.css';
 
 export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
@@ -121,6 +123,10 @@ export type SpinnerFactory = Factory<{
   stylesNames: SpinnerStylesNames;
   vars: SpinnerCssVariables;
   variant: SpinnerVariant;
+  staticComponents: {
+    Group: typeof SpinnerGroup;
+    Overlay: typeof SpinnerOverlay;
+  };
 }>;
 
 export const defaultProps: Partial<SpinnerProps> = {

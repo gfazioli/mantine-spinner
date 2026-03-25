@@ -1,11 +1,9 @@
-import { Spinner as SpinnerBase } from './Spinner';
+import { Spinner } from './Spinner';
 import { SpinnerGroup } from './SpinnerGroup';
 import { SpinnerOverlay } from './SpinnerOverlay';
 
-const Spinner = Object.assign(SpinnerBase, {
-  Group: SpinnerGroup,
-  Overlay: SpinnerOverlay,
-});
+Spinner.Group = SpinnerGroup;
+Spinner.Overlay = SpinnerOverlay;
 
 export { Spinner };
 export type {
@@ -19,5 +17,14 @@ export type {
   SpinnerStylesNames,
   SpinnerVariant,
 } from './Spinner';
-export type { SpinnerGroupProps } from './SpinnerGroup';
-export type { SpinnerOverlayProps } from './SpinnerOverlay';
+export type {
+  SpinnerGroupFactory,
+  SpinnerGroupProps,
+  SpinnerGroupStylesNames,
+} from './SpinnerGroup';
+export type {
+  SpinnerOverlayCssVariables,
+  SpinnerOverlayFactory,
+  SpinnerOverlayProps,
+  SpinnerOverlayStylesNames,
+} from './SpinnerOverlay';
