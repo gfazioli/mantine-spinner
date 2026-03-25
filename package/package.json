@@ -1,6 +1,6 @@
 {
   "name": "@gfazioli/mantine-spinner",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A Mantine React component with SVG-based loading spinners featuring multiple animation variants, segment shapes, gradient colors, glow effects, progress mode, and compound components.",
   "homepage": "https://gfazioli.github.io/mantine-spinner/",
   "packageManager": "yarn@4.0.1",
