@@ -21,6 +21,7 @@
 > Freely inspired by Matt Cannon on [CodePen](https://codepen.io/matt-cannon/pen/qEWKLoZ)
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
+It requires **Mantine 9.x** and **React 19**.
 
 [Mantine Spinner](https://gfazioli.github.io/mantine-spinner/) is a feature-rich React component designed to deliver smooth, customizable loading animations within Mantine-based applications. It exposes controls for visual tuning—including overall size, inner radius, segment count, stroke thickness, animation duration, direction, and much more—so you can match your brand and context, from subtle inline loaders to prominent page-level indicators.
 
