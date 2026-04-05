@@ -252,11 +252,12 @@ export const Spinner = factory<SpinnerFactory>((_props) => {
   } = props;
 
   // Ensure defaults for props used in calculations (useProps resolves them but TS doesn't know)
+  // Values must match defaultProps above
   const _segments = segments ?? 12;
-  const _thickness = thickness ?? 4;
+  const _thickness = thickness ?? 3;
   const _duration = duration ?? 1200;
-  const _size = size ?? 40;
-  const _inner = inner ?? 0;
+  const _size = size ?? 'md';
+  const _inner = inner ?? 8;
 
   const getStyles = useStyles<SpinnerFactory>({
     name: 'Spinner',
