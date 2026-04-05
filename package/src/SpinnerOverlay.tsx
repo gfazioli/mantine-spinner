@@ -57,7 +57,7 @@ const varsResolver = createVarsResolver<SpinnerOverlayFactory>((_, { blur, zInde
   },
 }));
 
-export const SpinnerOverlay = factory<SpinnerOverlayFactory>((_props, ref) => {
+export const SpinnerOverlay = factory<SpinnerOverlayFactory>((_props) => {
   const props = useProps('SpinnerOverlay', defaultProps, _props);
   const {
     visible,
@@ -88,7 +88,7 @@ export const SpinnerOverlay = factory<SpinnerOverlayFactory>((_props, ref) => {
   });
 
   return (
-    <Box ref={ref} {...getStyles('root')} {...others}>
+    <Box {...getStyles('root')} {...others}>
       {children}
       {visible && (
         <div {...getStyles('overlay')}>

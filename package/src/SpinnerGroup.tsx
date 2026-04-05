@@ -27,7 +27,7 @@ export type SpinnerGroupFactory = Factory<{
 
 const defaultProps: Partial<SpinnerGroupProps> = {};
 
-export const SpinnerGroup = factory<SpinnerGroupFactory>((_props, ref) => {
+export const SpinnerGroup = factory<SpinnerGroupFactory>((_props) => {
   const props = useProps('SpinnerGroup', defaultProps, _props);
   const { children, classNames, className, style, styles, unstyled, vars, ...others } = props;
 
@@ -44,7 +44,7 @@ export const SpinnerGroup = factory<SpinnerGroupFactory>((_props, ref) => {
   });
 
   return (
-    <Box ref={ref} {...getStyles('root')} {...others}>
+    <Box {...getStyles('root')} {...others}>
       {children}
     </Box>
   );

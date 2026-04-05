@@ -207,7 +207,7 @@ const varsResolver = createVarsResolver<SpinnerFactory>(
   }
 );
 
-export const Spinner = factory<SpinnerFactory>((_props, ref) => {
+export const Spinner = factory<SpinnerFactory>((_props) => {
   const mounted = useMounted();
   const props = useProps('Spinner', defaultProps, _props);
   const theme = useMantineTheme();
@@ -251,6 +251,13 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     ...others
   } = props;
 
+  // Ensure defaults for props used in calculations (useProps resolves them but TS doesn't know)
+  const _segments = segments ?? 12;
+  const _thickness = thickness ?? 4;
+  const _duration = duration ?? 1200;
+  const _size = size ?? 40;
+  const _inner = inner ?? 0;
+
   const getStyles = useStyles<SpinnerFactory>({
     name: 'Spinner',
     props,
@@ -265,14 +272,14 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
   });
 
   const geometry = useMemo(() => {
-    const sizeValue = getSizeValue(size);
-    const innerValue = getSizeValue(inner);
+    const sizeValue = getSizeValue(_size);
+    const innerValue = getSizeValue(_inner);
     const center = sizeValue / 2;
-    const maxRadius = center - thickness;
+    const maxRadius = center - _thickness;
     const radius = Math.min(sizeValue / 2, maxRadius);
     const innerRadius = Math.min(innerValue, radius);
     return { sizeValue, center, radius, innerRadius };
-  }, [size, inner, thickness]);
+  }, [_size, _inner, _thickness]);
 
   const parsedColors = useMemo(() => {
     const effectiveGradient =
@@ -280,21 +287,21 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
     if (effectiveGradient) {
       const fromColor = parseThemeColor({ color: effectiveGradient.from, theme }).value;
       const toColor = parseThemeColor({ color: effectiveGradient.to, theme }).value;
-      return Array.from({ length: segments }, (_, i) =>
-        interpolateColor(fromColor, toColor, segments > 1 ? i / (segments - 1) : 0)
+      return Array.from({ length: _segments }, (_, i) =>
+        interpolateColor(fromColor, toColor, _segments > 1 ? i / (_segments - 1) : 0)
       );
     }
     if (colors && colors.length > 0) {
-      return colors.map((c) => parseThemeColor({ color: c, theme }).value);
+      return colors.map((c: string) => parseThemeColor({ color: c, theme }).value);
     }
     return [parseThemeColor({ color: color || theme.primaryColor, theme }).value];
-  }, [gradient, gradientFrom, gradientTo, colors, color, theme, segments]);
+  }, [gradient, gradientFrom, gradientTo, colors, color, theme, _segments]);
 
   const directionValue = direction === 'counter-clockwise' ? -1 : 1;
   const { sizeValue, center, radius, innerRadius } = geometry;
   const isProgress = progress !== undefined;
   const filledCount = isProgress
-    ? Math.round((Math.min(Math.max(progress, 0), 100) / 100) * segments)
+    ? Math.round((Math.min(Math.max(progress, 0), 100) / 100) * _segments)
     : 0;
   const glowIntensity = typeof glow === 'number' ? glow : glow ? 3 : 0;
   const needsGlow = glowIntensity > 0;
@@ -319,7 +326,6 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
 
   return (
     <Box
-      ref={ref}
       {...getStyles('root')}
       component="svg"
       {...others}
@@ -349,8 +355,8 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
           </filter>
         </defs>
       )}
-      {Array.from({ length: segments }).map((_, index) => {
-        const angle = (360 / segments) * index - 90;
+      {Array.from({ length: _segments }).map((_, index) => {
+        const angle = (360 / _segments) * index - 90;
         const rad = (angle * Math.PI) / 180;
 
         const x1 = center + innerRadius * Math.cos(rad);
@@ -360,12 +366,12 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
 
         const lineStyle = isProgress
           ? { opacity: index < filledCount ? maxOpacity : minOpacity }
-          : { animationDelay: `${(index * duration * directionValue) / segments}ms` };
+          : { animationDelay: `${(index * _duration * directionValue) / _segments}ms` };
 
-        const segColor = parsedColors[index % parsedColors.length];
+        const segColor = parsedColors[index % parsedColors.length] as string;
 
+        const itemKey = `${_segments}-${index}`;
         const commonProps = {
-          key: `${segments}-${index}`,
           ...getStyles('line', { style: lineStyle }),
           filter: needsGlow ? `url(#${filterId})` : undefined,
           'data-variant': isProgress ? undefined : variant,
@@ -378,13 +384,13 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
           const cx = center + midRadius * Math.cos(rad);
           const cy = center + midRadius * Math.sin(rad);
           const dotR = (radius - innerRadius) / 2;
-          return <circle {...commonProps} cx={cx} cy={cy} r={dotR} fill={segColor} />;
+          return <circle key={itemKey} {...commonProps} cx={cx} cy={cy} r={dotR} fill={segColor} />;
         }
 
         if (segmentShape === 'arc') {
           const midRadius = (innerRadius + radius) / 2;
           // Each arc fills 70% of its angular slot, leaving 30% as visible gap
-          const arcSpan = ((360 / segments) * 0.7 * Math.PI) / 180;
+          const arcSpan = ((360 / _segments) * 0.7 * Math.PI) / 180;
           const startRad = rad - arcSpan / 2;
           const endRad = rad + arcSpan / 2;
           const sx = center + midRadius * Math.cos(startRad);
@@ -393,19 +399,27 @@ export const Spinner = factory<SpinnerFactory>((_props, ref) => {
           const ey = center + midRadius * Math.sin(endRad);
           const d = `M ${sx} ${sy} A ${midRadius} ${midRadius} 0 0 1 ${ex} ${ey}`;
           return (
-            <path {...commonProps} d={d} stroke={segColor} strokeWidth={thickness} fill="none" />
+            <path
+              key={itemKey}
+              {...commonProps}
+              d={d}
+              stroke={segColor}
+              strokeWidth={_thickness}
+              fill="none"
+            />
           );
         }
 
         return (
           <line
+            key={itemKey}
             {...commonProps}
             x1={x1}
             y1={y1}
             x2={x2}
             y2={y2}
             stroke={segColor}
-            strokeWidth={thickness}
+            strokeWidth={_thickness}
           />
         );
       })}
