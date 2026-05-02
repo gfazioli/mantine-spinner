@@ -4,6 +4,8 @@
   --spinner-play-state: running;
   --spinner-min-opacity: 0;
   --spinner-max-opacity: 1;
+  width: var(--spinner-size);
+  height: var(--spinner-size);
   overflow: visible;
   opacity: 1;
   transform: scale(1);

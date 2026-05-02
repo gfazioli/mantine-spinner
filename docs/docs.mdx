@@ -32,6 +32,12 @@ Use the `segmentShape` prop to change the shape of individual segments. Availabl
 
 <Demo data={demos.shapes} />
 
+## Responsive size
+
+The `size` prop accepts a Mantine breakpoint object (`{ base, xs, sm, md, lg, xl }`) and resizes the spinner via CSS media queries — **no React re-renders** on viewport changes. The internal SVG geometry is computed at the base breakpoint value; the rendered width and height are scaled through the `--spinner-size` CSS variable, so stroke proportions stay visually correct across all sizes.
+
+<Demo data={demos.responsive} />
+
 ## Trail variant
 
 The `trail` variant creates a classic sweeping tail effect, similar to the iOS/macOS activity indicator. Each segment fades out linearly, producing a smooth trailing animation.

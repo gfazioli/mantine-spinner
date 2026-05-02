@@ -44,6 +44,18 @@ describe('Spinner', () => {
     expect(svg).toHaveAttribute('height', '100');
   });
 
+  it('accepts a responsive object for size and uses base value for SVG geometry', () => {
+    const { container } = render(<Spinner size={{ base: 'sm', md: 'lg', xl: 100 }} />);
+    const svg = container.querySelector('svg');
+    // SVG geometry is computed at the base breakpoint value (sm = 22)
+    expect(svg).toHaveAttribute('width', '22');
+    expect(svg).toHaveAttribute('height', '22');
+    expect(svg).toHaveAttribute('viewBox', '0 0 22 22');
+    // SpinnerMediaVariables emits a <style> tag with --spinner-size per breakpoint
+    const styleTags = Array.from(container.querySelectorAll('style')).map((s) => s.textContent);
+    expect(styleTags.some((s) => s?.includes('--spinner-size'))).toBe(true);
+  });
+
   it('applies stroke color from color prop', () => {
     const { container } = render(<Spinner color="red" />);
     const line = container.querySelector('line');

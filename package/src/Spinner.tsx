@@ -5,17 +5,21 @@ import {
   createVarsResolver,
   Factory,
   factory,
+  getBaseValue,
   MantineColor,
   MantineSize,
   parseThemeColor,
   px,
+  StyleProp,
   StylesApiProps,
   useMantineTheme,
   useProps,
+  useRandomClassName,
   useStyles,
 } from '@mantine/core';
 import { useMounted, useReducedMotion } from '@mantine/hooks';
 import type { SpinnerGroup } from './SpinnerGroup';
+import { SpinnerMediaVariables } from './SpinnerMediaVariables';
 import type { SpinnerOverlay } from './SpinnerOverlay';
 import classes from './Spinner.module.css';
 
@@ -29,6 +33,7 @@ export type SpinnerStylesNames = 'root' | 'line' | 'content';
 
 export type SpinnerCssVariables = {
   root:
+    | '--spinner-size'
     | '--spinner-animation-duration'
     | '--spinner-stroke-linecap'
     | '--spinner-timing-function'
@@ -45,8 +50,15 @@ export interface SpinnerGradient {
 }
 
 export interface SpinnerBaseProps {
-  /** Controls `width` and `height` of the spinner. `Spinner` has predefined `xs`-`xl` values. Numbers are converted to rem. Default value is `'md'` */
-  size?: MantineSize | (string & {}) | number;
+  /**
+   * Controls `width` and `height` of the spinner. `Spinner` has predefined `xs`-`xl` values.
+   * Numbers are converted to rem. Default value is `'md'`.
+   *
+   * Supports responsive breakpoint objects like `{ base: 'sm', md: 'lg' }` — the spinner
+   * resizes via CSS media queries with no React re-renders. Internal SVG geometry is
+   * computed at the base value, and the CSS scaling preserves visual proportions.
+   */
+  size?: StyleProp<MantineSize | (string & {}) | number>;
 
   /** Controls size of inner part of the spinner, number is converted to rem. Default value is `8` */
   inner?: MantineSize | (string & {}) | number;
@@ -196,6 +208,8 @@ const varsResolver = createVarsResolver<SpinnerFactory>(
   (_, { strokeLinecap, duration, transitionTimingFunction, paused, minOpacity, maxOpacity }) => {
     return {
       root: {
+        // `--spinner-size` is set per-breakpoint by `SpinnerMediaVariables`.
+        '--spinner-size': undefined,
         '--spinner-stroke-linecap': strokeLinecap,
         '--spinner-animation-duration': `${duration || 1}ms`,
         '--spinner-timing-function': transitionTimingFunction,
@@ -259,6 +273,12 @@ export const Spinner = factory<SpinnerFactory>((_props) => {
   const _size = size ?? 'md';
   const _inner = inner ?? 8;
 
+  // SVG geometry is computed against the base breakpoint value of `size`.
+  // CSS `width`/`height` are responsive via SpinnerMediaVariables — the SVG scales
+  // uniformly through `viewBox` + `preserveAspectRatio`, preserving stroke proportions.
+  const baseSize = getBaseValue(_size as StyleProp<MantineSize | (string & {}) | number>) ?? 'md';
+  const responsiveClassName = useRandomClassName();
+
   const getStyles = useStyles<SpinnerFactory>({
     name: 'Spinner',
     props,
@@ -273,14 +293,14 @@ export const Spinner = factory<SpinnerFactory>((_props) => {
   });
 
   const geometry = useMemo(() => {
-    const sizeValue = getSizeValue(_size);
+    const sizeValue = getSizeValue(baseSize);
     const innerValue = getSizeValue(_inner);
     const center = sizeValue / 2;
     const maxRadius = center - _thickness;
     const radius = Math.min(sizeValue / 2, maxRadius);
     const innerRadius = Math.min(innerValue, radius);
     return { sizeValue, center, radius, innerRadius };
-  }, [_size, _inner, _thickness]);
+  }, [baseSize, _inner, _thickness]);
 
   const parsedColors = useMemo(() => {
     const effectiveGradient =
@@ -326,120 +346,125 @@ export const Spinner = factory<SpinnerFactory>((_props) => {
         : { role: 'status' as const, 'aria-label': label };
 
   return (
-    <Box
-      {...getStyles('root')}
-      component="svg"
-      {...others}
-      xmlns="http://www.w3.org/2000/svg"
-      width={sizeValue}
-      height={sizeValue}
-      viewBox={`0 0 ${sizeValue} ${sizeValue}`}
-      preserveAspectRatio="xMidYMid meet"
-      {...accessibilityProps}
-      data-hue-rotate={hueRotate || undefined}
-    >
-      {needsGlow && (
-        <defs>
-          <filter
-            id={filterId}
-            filterUnits="userSpaceOnUse"
-            x={-sizeValue}
-            y={-sizeValue}
-            width={sizeValue * 3}
-            height={sizeValue * 3}
-          >
-            <feGaussianBlur stdDeviation={glowIntensity} result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-      )}
-      {Array.from({ length: _segments }).map((_, index) => {
-        const angle = (360 / _segments) * index - 90;
-        const rad = (angle * Math.PI) / 180;
+    <>
+      <SpinnerMediaVariables size={_size} selector={`.${responsiveClassName}`} />
+      <Box
+        {...getStyles('root', { className: responsiveClassName })}
+        component="svg"
+        {...others}
+        xmlns="http://www.w3.org/2000/svg"
+        width={sizeValue}
+        height={sizeValue}
+        viewBox={`0 0 ${sizeValue} ${sizeValue}`}
+        preserveAspectRatio="xMidYMid meet"
+        {...accessibilityProps}
+        data-hue-rotate={hueRotate || undefined}
+      >
+        {needsGlow && (
+          <defs>
+            <filter
+              id={filterId}
+              filterUnits="userSpaceOnUse"
+              x={-sizeValue}
+              y={-sizeValue}
+              width={sizeValue * 3}
+              height={sizeValue * 3}
+            >
+              <feGaussianBlur stdDeviation={glowIntensity} result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+        )}
+        {Array.from({ length: _segments }).map((_, index) => {
+          const angle = (360 / _segments) * index - 90;
+          const rad = (angle * Math.PI) / 180;
 
-        const x1 = center + innerRadius * Math.cos(rad);
-        const y1 = center + innerRadius * Math.sin(rad);
-        const x2 = center + radius * Math.cos(rad);
-        const y2 = center + radius * Math.sin(rad);
+          const x1 = center + innerRadius * Math.cos(rad);
+          const y1 = center + innerRadius * Math.sin(rad);
+          const x2 = center + radius * Math.cos(rad);
+          const y2 = center + radius * Math.sin(rad);
 
-        const lineStyle = isProgress
-          ? { opacity: index < filledCount ? maxOpacity : minOpacity }
-          : { animationDelay: `${(index * _duration * directionValue) / _segments}ms` };
+          const lineStyle = isProgress
+            ? { opacity: index < filledCount ? maxOpacity : minOpacity }
+            : { animationDelay: `${(index * _duration * directionValue) / _segments}ms` };
 
-        const segColor = parsedColors[index % parsedColors.length] as string;
+          const segColor = parsedColors[index % parsedColors.length] as string;
 
-        const itemKey = `${_segments}-${index}`;
-        const commonProps = {
-          ...getStyles('line', { style: lineStyle }),
-          filter: needsGlow ? `url(#${filterId})` : undefined,
-          'data-variant': isProgress ? undefined : variant,
-          'data-progress': isProgress || undefined,
-          'data-reduced-motion': shouldReduceMotion || undefined,
-        };
+          const itemKey = `${_segments}-${index}`;
+          const commonProps = {
+            ...getStyles('line', { style: lineStyle }),
+            filter: needsGlow ? `url(#${filterId})` : undefined,
+            'data-variant': isProgress ? undefined : variant,
+            'data-progress': isProgress || undefined,
+            'data-reduced-motion': shouldReduceMotion || undefined,
+          };
 
-        if (segmentShape === 'dot') {
-          const midRadius = (innerRadius + radius) / 2;
-          const cx = center + midRadius * Math.cos(rad);
-          const cy = center + midRadius * Math.sin(rad);
-          const dotR = (radius - innerRadius) / 2;
-          return <circle key={itemKey} {...commonProps} cx={cx} cy={cy} r={dotR} fill={segColor} />;
-        }
+          if (segmentShape === 'dot') {
+            const midRadius = (innerRadius + radius) / 2;
+            const cx = center + midRadius * Math.cos(rad);
+            const cy = center + midRadius * Math.sin(rad);
+            const dotR = (radius - innerRadius) / 2;
+            return (
+              <circle key={itemKey} {...commonProps} cx={cx} cy={cy} r={dotR} fill={segColor} />
+            );
+          }
 
-        if (segmentShape === 'arc') {
-          const midRadius = (innerRadius + radius) / 2;
-          // Each arc fills 70% of its angular slot, leaving 30% as visible gap
-          const arcSpan = ((360 / _segments) * 0.7 * Math.PI) / 180;
-          const startRad = rad - arcSpan / 2;
-          const endRad = rad + arcSpan / 2;
-          const sx = center + midRadius * Math.cos(startRad);
-          const sy = center + midRadius * Math.sin(startRad);
-          const ex = center + midRadius * Math.cos(endRad);
-          const ey = center + midRadius * Math.sin(endRad);
-          const d = `M ${sx} ${sy} A ${midRadius} ${midRadius} 0 0 1 ${ex} ${ey}`;
+          if (segmentShape === 'arc') {
+            const midRadius = (innerRadius + radius) / 2;
+            // Each arc fills 70% of its angular slot, leaving 30% as visible gap
+            const arcSpan = ((360 / _segments) * 0.7 * Math.PI) / 180;
+            const startRad = rad - arcSpan / 2;
+            const endRad = rad + arcSpan / 2;
+            const sx = center + midRadius * Math.cos(startRad);
+            const sy = center + midRadius * Math.sin(startRad);
+            const ex = center + midRadius * Math.cos(endRad);
+            const ey = center + midRadius * Math.sin(endRad);
+            const d = `M ${sx} ${sy} A ${midRadius} ${midRadius} 0 0 1 ${ex} ${ey}`;
+            return (
+              <path
+                key={itemKey}
+                {...commonProps}
+                d={d}
+                stroke={segColor}
+                strokeWidth={_thickness}
+                fill="none"
+              />
+            );
+          }
+
           return (
-            <path
+            <line
               key={itemKey}
               {...commonProps}
-              d={d}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
               stroke={segColor}
               strokeWidth={_thickness}
-              fill="none"
             />
           );
-        }
-
-        return (
-          <line
-            key={itemKey}
-            {...commonProps}
-            x1={x1}
-            y1={y1}
-            x2={x2}
-            y2={y2}
-            stroke={segColor}
-            strokeWidth={_thickness}
-          />
-        );
-      })}
-      {children && (
-        <foreignObject x="0" y="0" width={sizeValue} height={sizeValue} {...getStyles('content')}>
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {children}
-          </div>
-        </foreignObject>
-      )}
-    </Box>
+        })}
+        {children && (
+          <foreignObject x="0" y="0" width={sizeValue} height={sizeValue} {...getStyles('content')}>
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {children}
+            </div>
+          </foreignObject>
+        )}
+      </Box>
+    </>
   );
 });
 
