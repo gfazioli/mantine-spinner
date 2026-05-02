@@ -10,6 +10,8 @@ export const SpinnerStylesApi: StylesApiData<SpinnerFactory> = {
 
   vars: {
     root: {
+      '--spinner-size':
+        'Rendered width and height (driven by the `size` prop, supports responsive breakpoints)',
       '--spinner-stroke-linecap': 'Stroke linecap',
       '--spinner-animation-duration': 'Duration of the animation',
       '--spinner-timing-function': 'Animation timing function',

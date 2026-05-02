@@ -7,6 +7,7 @@ export { neon } from './Spinner.demo.neon';
 export { overlay } from './Spinner.demo.overlay';
 export { progressDemo } from './Spinner.demo.progress';
 export { random } from './Spinner.demo.random';
+export { responsive } from './Spinner.demo.responsive';
 export { shapes } from './Spinner.demo.shapes';
 export { styled } from './Spinner.demo.styled';
 export { trail } from './Spinner.demo.trail';
