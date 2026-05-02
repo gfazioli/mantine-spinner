@@ -56,6 +56,24 @@ describe('Spinner', () => {
     expect(styleTags.some((s) => s?.includes('--spinner-size'))).toBe(true);
   });
 
+  it('falls back to default size when responsive object omits base', () => {
+    const { container } = render(<Spinner size={{ md: 'lg' }} />);
+    const svg = container.querySelector('svg');
+    // Both SVG geometry and --spinner-size should fall back to md (36) at the base viewport
+    expect(svg).toHaveAttribute('width', '36');
+    expect(svg).toHaveAttribute('viewBox', '0 0 36 36');
+  });
+
+  it('does not break SVG geometry when size is a non-pixel string', () => {
+    // Percentage values (and other non-px strings) used to produce viewBox="0 0 NaN NaN"
+    const { container } = render(<Spinner size="50%" />);
+    const svg = container.querySelector('svg');
+    const viewBox = svg?.getAttribute('viewBox');
+    expect(viewBox).not.toContain('NaN');
+    // Geometry falls back to default (md = 36) so the SVG still renders
+    expect(viewBox).toBe('0 0 36 36');
+  });
+
   it('applies stroke color from color prop', () => {
     const { container } = render(<Spinner color="red" />);
     const line = container.querySelector('line');

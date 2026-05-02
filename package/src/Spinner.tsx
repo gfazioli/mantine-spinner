@@ -9,7 +9,6 @@ import {
   MantineColor,
   MantineSize,
   parseThemeColor,
-  px,
   StyleProp,
   StylesApiProps,
   useMantineTheme,
@@ -21,6 +20,7 @@ import { useMounted, useReducedMotion } from '@mantine/hooks';
 import type { SpinnerGroup } from './SpinnerGroup';
 import { SpinnerMediaVariables } from './SpinnerMediaVariables';
 import type { SpinnerOverlay } from './SpinnerOverlay';
+import { getSpinnerSizeValue, SPINNER_DEFAULT_SIZE } from './spinner-size';
 import classes from './Spinner.module.css';
 
 export type SpinnerDirection = 'clockwise' | 'counter-clockwise';
@@ -160,22 +160,6 @@ export const defaultProps: Partial<SpinnerProps> = {
   segmentShape: 'line',
 };
 
-const SIZE_VALUES: Record<string, number> = {
-  xl: 58,
-  lg: 44,
-  md: 36,
-  sm: 22,
-  xs: 18,
-};
-
-function getSizeValue(size: MantineSize | (string & {}) | number): number {
-  if (typeof size === 'string' && size in SIZE_VALUES) {
-    return SIZE_VALUES[size];
-  }
-
-  return px(size) as number;
-}
-
 function parseRgb(color: string): [number, number, number] {
   if (color.startsWith('#')) {
     const hex =
@@ -276,7 +260,8 @@ export const Spinner = factory<SpinnerFactory>((_props) => {
   // SVG geometry is computed against the base breakpoint value of `size`.
   // CSS `width`/`height` are responsive via SpinnerMediaVariables — the SVG scales
   // uniformly through `viewBox` + `preserveAspectRatio`, preserving stroke proportions.
-  const baseSize = getBaseValue(_size as StyleProp<MantineSize | (string & {}) | number>) ?? 'md';
+  const baseSize =
+    getBaseValue(_size as StyleProp<MantineSize | (string & {}) | number>) ?? SPINNER_DEFAULT_SIZE;
   const responsiveClassName = useRandomClassName();
 
   const getStyles = useStyles<SpinnerFactory>({
@@ -293,8 +278,8 @@ export const Spinner = factory<SpinnerFactory>((_props) => {
   });
 
   const geometry = useMemo(() => {
-    const sizeValue = getSizeValue(baseSize);
-    const innerValue = getSizeValue(_inner);
+    const sizeValue = getSpinnerSizeValue(baseSize);
+    const innerValue = getSpinnerSizeValue(_inner);
     const center = sizeValue / 2;
     const maxRadius = center - _thickness;
     const radius = Math.min(sizeValue / 2, maxRadius);
