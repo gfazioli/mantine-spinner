@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { Spinner } from '@gfazioli/mantine-spinner';
 import { Center, Slider, Stack, Text } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { useState } from 'react';
 
 function Demo() {
   const [progress, setProgress] = useState(65);

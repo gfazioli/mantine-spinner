@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { Spinner } from '@gfazioli/mantine-spinner';
 import { Button, Card, Group, Stack, Text } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { useState } from 'react';
 
 function Demo() {
   const [loading, setLoading] = useState(true);

@@ -1,4 +1,3 @@
-import React, { useMemo } from 'react';
 import {
   Box,
   BoxProps,
@@ -17,10 +16,11 @@ import {
   useStyles,
 } from '@mantine/core';
 import { useMounted, useReducedMotion } from '@mantine/hooks';
+import React, { useMemo } from 'react';
+import { getSpinnerSizeValue, SPINNER_DEFAULT_SIZE } from './spinner-size';
 import type { SpinnerGroup } from './SpinnerGroup';
 import { SpinnerMediaVariables } from './SpinnerMediaVariables';
 import type { SpinnerOverlay } from './SpinnerOverlay';
-import { getSpinnerSizeValue, SPINNER_DEFAULT_SIZE } from './spinner-size';
 import classes from './Spinner.module.css';
 
 export type SpinnerDirection = 'clockwise' | 'counter-clockwise';

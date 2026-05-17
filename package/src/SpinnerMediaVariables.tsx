@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   filterProps,
   getBaseValue,
@@ -10,6 +9,7 @@ import {
   useMantineTheme,
   type StyleProp,
 } from '@mantine/core';
+import React from 'react';
 import { getSpinnerSizeCssValue, SPINNER_DEFAULT_SIZE } from './spinner-size';
 
 interface SpinnerMediaVariablesProps {

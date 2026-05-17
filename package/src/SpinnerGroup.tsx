@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   BoxProps,
@@ -9,6 +8,7 @@ import {
   useProps,
   useStyles,
 } from '@mantine/core';
+import React from 'react';
 import classes from './SpinnerGroup.module.css';
 
 export type SpinnerGroupStylesNames = 'root';
