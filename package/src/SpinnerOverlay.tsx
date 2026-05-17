@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   BoxProps,
@@ -10,6 +9,7 @@ import {
   useProps,
   useStyles,
 } from '@mantine/core';
+import React from 'react';
 import { Spinner, SpinnerProps } from './Spinner';
 import classes from './SpinnerOverlay.module.css';
 

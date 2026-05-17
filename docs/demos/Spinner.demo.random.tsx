@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   Spinner,
   SpinnerProps,
@@ -8,6 +7,7 @@ import {
 import { CodeHighlight } from '@mantine/code-highlight';
 import { Button, Center, Stack } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { useEffect, useState } from 'react';
 
 const VARIANTS: SpinnerVariant[] = ['fade', 'pulse', 'grow', 'trail'];
 const DIRECTIONS = ['clockwise', 'counter-clockwise'] as const;
