@@ -122,6 +122,3 @@ Your help truly matters.
 
 ---
 https://github.com/user-attachments/assets/2401bfe1-e829-4057-a654-7d0a895a9605
-
----  
-[![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-spinner&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-spinner&Timeline)
